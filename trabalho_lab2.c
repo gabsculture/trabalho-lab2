@@ -46,11 +46,7 @@ void buscar_dispositivo(){
 void lista_de_dispositivos(){
 
 }
-bool validaDescricao (Dispositivo dispositivo) {
-    
-}
 
-bool validaTIpo
 int main(){
     int opicao;
 
