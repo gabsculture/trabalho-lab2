@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct{
+struct Dispositivo {
     int id;
     char descricao[100];
     char tipo[100];
     char status[100];
+    struct dispositivo* proximo;
+};
 
-} Dispositivo;
+typedef struct dispositivo Dispositivo;
 
 
 typedef struct{
@@ -16,12 +18,6 @@ typedef struct{
 
 } Sensor;
 
-struct ListaDispositivos {
-    int informacoes;
-    struct lista* proximo;
-};
-
-typedef struct listaDispositivos ListaDispositivos;
 
 ListaDispositivos* inicializa(void) {
     return NULL;
