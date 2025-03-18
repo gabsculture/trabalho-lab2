@@ -8,22 +8,29 @@ struct Dispositivo {
     char tipo[100];
     char status[100];
     struct dispositivo* proximo;
+    Sensor sensor;
 };
 
 typedef struct dispositivo Dispositivo;
 
 
 typedef struct{
+    int id;
     char tipo[100];
 
 } Sensor;
 
 
-ListaDispositivos* inicializa(void) {
+Dispositivo* inicializa(void) {
     return NULL;
 }
 
+Dispositivo* criar_dispositivo(int id, char descricao, char tipo, char status,  Dispositivo *proximo, Sensor sensor ) {
+    
+}
+
 void insere_dispositivo(){
+    
 
 }
 
