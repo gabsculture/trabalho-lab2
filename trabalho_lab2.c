@@ -16,6 +16,17 @@ typedef struct{
 
 } Sensor;
 
+struct ListaDispositivos {
+    int informacoes;
+    struct lista* proximo;
+};
+
+typedef struct listaDispositivos ListaDispositivos;
+
+ListaDispositivos* inicializa(void) {
+    return NULL;
+}
+
 void insere_dispositivo(){
 
 }
@@ -35,7 +46,11 @@ void buscar_dispositivo(){
 void lista_de_dispositivos(){
 
 }
+bool validaDescricao (Dispositivo dispositivo) {
+    
+}
 
+bool validaTIpo
 int main(){
     int opicao;
 
