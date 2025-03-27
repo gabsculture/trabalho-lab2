@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
 
 typedef struct Sensor {
     int id;
@@ -60,6 +62,16 @@ void remove_dispositivo(Dispositivo** lista, int id) {
     printf("dispositivo removido com sucesso!\n");
 }
 
+bool valida_id(Dispositivo* lista, int id) {
+    while(lista != NULL) {
+        if(lista->id == id) {
+            return false;
+        }
+    
+        lista = lista->proximo;
+    }
+    return true;
+}
 void listar_dispositivos(Dispositivo* lista) {
     while (lista != NULL) {
         printf("ID: %d | descricao: %s | tipo: %s | status: %s\n",
@@ -107,12 +119,14 @@ int main() {
     Dispositivo* lista = inicializa();
     int opicao, id, valido, i, j;
     char descricao[100], tipo[100], status[100], tipo_sensor[100];
-    const char *tipos_validos[] = {"lampada", "camera", "tomada", "sensor", "ventilador", "ar condicionado"};
+    const char *tipos_validos[] = {"lampada", "camera", "tomada", "sensor", "ventilador", "ar_condicionado"};
     int num_tipos = sizeof(tipos_validos) / sizeof(tipos_validos[0]);
-    const char *condicoes_validas[] = {"ligado", "desligado", "offline", "com erro", "em espera", "em manutencao"};
+    const char *condicoes_validas[] = {"ligado", "desligado", "offline", "com_erro", "em_espera", "em_manutencao"};
     int num_condicoes = sizeof(condicoes_validas) / sizeof(condicoes_validas[0]);
     const char *tipos_sensores[] = {"temperatura", "umidade", "movimento", "luminosidade", "pressao", "proximidade", "fumaca", "gas", "agua"};
     int num_sensores = sizeof(tipos_sensores) / sizeof(tipos_sensores[0]);
+    bool verifica;
+
 
 
     do {
@@ -121,7 +135,11 @@ int main() {
 
         switch (opicao) {
             case 1:
-                printf("ID: "); scanf("%d", &id);
+                do{
+                    printf("ID: "); scanf("%d", &id);
+                    verifica = valida_id(lista, id);
+                }while(verifica != true); 
+                
                 printf("descricao: "); scanf("%s", descricao);
 
                 //le a entrtada do usuario e verifica se o dispositivo é valido
