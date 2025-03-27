@@ -97,10 +97,23 @@ void listar_sensores(Dispositivo* dispositivo) {
     }
 }
 
+void minusculas(char *str) {
+    for(int i = 0; str[i]; i++) {
+        str[i] = tolower(str[i]);
+    }
+}
+
 int main() {
     Dispositivo* lista = inicializa();
-    int opicao, id;
-    char descricao[100], tipo[100], status[100];
+    int opicao, id, valido, i, j;
+    char descricao[100], tipo[100], status[100], tipo_sensor[100];
+    const char *tipos_validos[] = {"lampada", "camera", "tomada", "sensor", "ventilador", "ar condicionado"};
+    int num_tipos = sizeof(tipos_validos) / sizeof(tipos_validos[0]);
+    const char *condicoes_validas[] = {"ligado", "desligado", "offline", "com erro", "em espera", "em manutencao"};
+    int num_condicoes = sizeof(condicoes_validas) / sizeof(condicoes_validas[0]);
+    const char *tipos_sensores[] = {"temperatura", "umidade", "movimento", "luminosidade", "pressao", "proximidade", "fumaca", "gas", "agua"};
+    int num_sensores = sizeof(tipos_sensores) / sizeof(tipos_sensores[0]);
+
 
     do {
         printf("\n1 - Inserir dispositivo\n2 - Remover dispositivo\n3 - Listar dispositivos\n4 - Adicionar sensor a um dispositivo\n5 - Listar sensores de um dispositivo\n6 - Sair\nopicao: ");
@@ -110,8 +123,56 @@ int main() {
             case 1:
                 printf("ID: "); scanf("%d", &id);
                 printf("descricao: "); scanf("%s", descricao);
-                printf("dipo: "); scanf("%s", tipo);
-                printf("status: "); scanf("%s", status);
+
+                //le a entrtada do usuario e verifica se o dispositivo é valido
+                do{
+                    printf("Tipo de dispositivo: ");
+                    scanf("%19s", tipo);
+                    
+                    minusculas(tipo);
+                    
+                    valido = 0;
+                    i = 0;
+                    while(i < num_tipos &&  valido == 0){
+                        if(strcmp(tipo, tipos_validos[i]) == 0){
+                            valido = 1;
+                        }
+                        i++;
+                    }
+                    
+                    if(!valido){
+                        printf("Tipo invalido! Os tipos validos sao:\n");
+                        for(i = 0; i < num_tipos; i++){
+                            printf("- %s\n", tipos_validos[i]);
+                        }
+                    }
+                }while(valido != 1);
+                valido = 0;
+
+                //le a entrtada do usuario e verifica se a condição é valida
+                do{
+                    printf("Condição do dispositivo: ");
+                    scanf("%19s", status);
+                    
+                    minusculas(status);
+                    
+                    valido = 0;
+                    i = 0;
+                    while(i < num_condicoes && valido == 0){
+                        if(strcmp(status, condicoes_validas[i]) == 0){
+                            valido = 1;
+                        }
+                        i++;
+                    }
+                    
+                    if(!valido){
+                        printf("Condicao invalida! As condicoes permitidas sao:\n");
+                        for(j = 0; j < num_condicoes; j++){
+                            printf("- %s\n", condicoes_validas[j]);
+                        }
+                    }
+                }while(valido != 1);
+                valido = 0;
                 insere_dispositivo(&lista, criar_dispositivo(id, descricao, tipo, status));
                 break;
             case 2:
@@ -132,8 +193,29 @@ int main() {
                     break;
                 }
                 printf("ID do sensor: "); scanf("%d", &id);
-                printf("tipo do sensor: "); scanf("%s", tipo);
-                insere_sensor(dispositivo, criar_sensor(id, tipo));
+                do{
+                    printf("Tipo do sensor: ");
+                    scanf("%19s", tipo_sensor);
+    
+                    minusculas(tipo_sensor);
+                    
+                    valido = 0;
+                    i = 0;
+                    while(i < num_sensores && valido == 0){
+                        if(strcmp(tipo_sensor, tipos_sensores[i]) == 0){
+                            valido = 1;
+                        }
+                        i++;
+                    }
+                    
+                    if(!valido){
+                        printf("Tipo de sensor invalido! Os tipos validos sao:\n");
+                        for(j = 0; j < num_sensores; j++){
+                            printf("- %s\n", tipos_sensores[j]);
+                        }
+                    }
+                }while(valido != 1);
+                insere_sensor(dispositivo, criar_sensor(id, tipo_sensor));
                 break;
             case 5:
                 printf("ID do dispositivo q deseja ver os sensores: "); scanf("%d", &id);
