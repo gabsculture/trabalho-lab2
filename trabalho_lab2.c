@@ -1,3 +1,4 @@
+// Diogo Dalbianco dos Santos e Gabriela Vitória da Rosa Soares 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
