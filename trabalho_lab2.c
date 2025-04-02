@@ -20,7 +20,7 @@ typedef struct Dispositivo {
     struct Dispositivo* proximo;
 } Dispositivo;
 
-Dispositivo* inicializa() {
+Dispositivo* inicializa() { //inicia a lista vazia
     return NULL;
 }
 
@@ -116,18 +116,97 @@ void minusculas(char *str) {
     }
 }
 
+void confere_dispositivos(char* tipo){ //função responsavel por verificar os dispositivos que o usuario digita
+    const char *tipos_validos[] = {"lampada", "camera", "tomada", "sensor", "ventilador", "ar_condicionado"}; //faz uma pequena lista dos dispositivos que podem ser adicionados
+    int num_tipos = sizeof(tipos_validos) / sizeof(tipos_validos[0]), valido, i;
+
+    do{
+        printf("Tipo de dispositivo: ");
+        scanf("%19s", tipo);
+
+        minusculas(tipo); //Caso seja digitado em letras maiusculas, converte para minusculas
+
+        valido = 0;
+        i = 0;
+        while(i < num_tipos &&  valido == 0){ //Compara todos tipos validos com os tipos digitados
+            if(strcmp(tipo, tipos_validos[i]) == 0){
+                valido = 1;
+            }
+            i++;
+        }
+
+        if(!valido){ //Xinga usuario
+            printf("Tipo invalido! Os tipos validos sao:\n");
+            for(i = 0; i < num_tipos; i++){
+                printf("- %s\n", tipos_validos[i]);
+            }
+        }
+    }while(valido != 1);
+}
+
+void condicoes_validas(char* status){
+    const char *condicoes_validas[] = {"ligado", "desligado", "offline", "com_erro", "em_espera", "em_manutencao"};
+    int num_condicoes = sizeof(condicoes_validas) / sizeof(condicoes_validas[0]), valido, i;
+
+    do{
+        printf("Condicao do dispositivo: ");
+        scanf("%19s", status);
+
+        minusculas(status);
+
+        valido = 0;
+        i = 0;
+        while(i < num_condicoes && valido == 0){
+            if(strcmp(status, condicoes_validas[i]) == 0){
+                valido = 1;
+            }
+            i++;
+        }
+
+        if(!valido){
+            printf("Condicao invalida! As condicoes permitidas sao:\n");
+            for(i = 0; i < num_condicoes; i++){
+                printf("- %s\n", condicoes_validas[i]);
+            }
+        }
+    }while(valido != 1);
+}
+
+void subtipo_validos(char* subtipo_sensor) {
+    const char *subtipos_sensores[] = {"temperatura", "umidade", "movimento", "luminosidade", "pressao", "proximidade", "fumaca", "gas", "agua"};
+    int num_subsensores = sizeof(subtipos_sensores) / sizeof(subtipos_sensores[0]), valido, i;
+
+    do{
+        printf("Tipo do sensor: ");
+        scanf("%19s", subtipo_sensor);
+
+        minusculas(subtipo_sensor);
+
+        valido = 0;
+        i = 0;
+        while(i < num_subsensores && valido == 0){
+            if(strcmp(subtipo_sensor, subtipos_sensores[i]) == 0){
+                valido = 1;
+            }
+            i++;
+        }
+
+        if(!valido){
+            printf("Tipo de sensor invalido! Os tipos validos sao:\n");
+            for(i = 0; i < num_subsensores; i++){
+                printf("- %s\n", subtipos_sensores[i]);
+            }
+        }
+    }while(valido != 1);
+
+}
+
+
 int main() {
     Dispositivo* lista = inicializa();
-    int opicao, id, valido, i, j;
-    char descricao[100], tipo[100], status[100], tipo_sensor[100], subtipo_sensor[100];
-    const char *tipos_validos[] = {"lampada", "camera", "tomada", "sensor", "ventilador", "ar_condicionado"};
-    int num_tipos = sizeof(tipos_validos) / sizeof(tipos_validos[0]);
-    const char *condicoes_validas[] = {"ligado", "desligado", "offline", "com_erro", "em_espera", "em_manutencao"};
-    int num_condicoes = sizeof(condicoes_validas) / sizeof(condicoes_validas[0]);
-    const char *subtipos_sensores[] = {"temperatura", "umidade", "movimento", "luminosidade", "pressao", "proximidade", "fumaca", "gas", "agua"};
-    int num_subsensores = sizeof(subtipos_sensores) / sizeof(subtipos_sensores[0]);
+    int opicao, id;
+    char descricao[100], tipo[100], status[100], subtipo_sensor[100];
     bool verifica;
-
 
 
     do {
@@ -136,7 +215,7 @@ int main() {
 
         switch (opicao) {
             case 1:
-                do{
+                do{ //verifica se o id já não foi digitado
                     printf("ID: "); scanf("%d", &id);
                     verifica = valida_id(lista, id);
                 }while(verifica != true); 
@@ -144,56 +223,14 @@ int main() {
                 printf("descricao: "); scanf("%s", descricao);
 
                 //le a entrtada do usuario e verifica se o dispositivo é valido
-                do{
-                    printf("Tipo de dispositivo: ");
-                    scanf("%19s", tipo);
-                    
-                    minusculas(tipo);
-                    
-                    valido = 0;
-                    i = 0;
-                    while(i < num_tipos &&  valido == 0){
-                        if(strcmp(tipo, tipos_validos[i]) == 0){
-                            valido = 1;
-                        }
-                        i++;
-                    }
-                    
-                    if(!valido){
-                        printf("Tipo invalido! Os tipos validos sao:\n");
-                        for(i = 0; i < num_tipos; i++){
-                            printf("- %s\n", tipos_validos[i]);
-                        }
-                    }
-                }while(valido != 1);
-                valido = 0;
+                confere_dispositivos(tipo);
 
                 //le a entrtada do usuario e verifica se a condição é valida
-                do{
-                    printf("Condição do dispositivo: ");
-                    scanf("%19s", status);
-                    
-                    minusculas(status);
-                    
-                    valido = 0;
-                    i = 0;
-                    while(i < num_condicoes && valido == 0){
-                        if(strcmp(status, condicoes_validas[i]) == 0){
-                            valido = 1;
-                        }
-                        i++;
-                    }
-                    
-                    if(!valido){
-                        printf("Condicao invalida! As condicoes permitidas sao:\n");
-                        for(j = 0; j < num_condicoes; j++){
-                            printf("- %s\n", condicoes_validas[j]);
-                        }
-                    }
-                }while(valido != 1);
-                valido = 0;
+                condicoes_validas(status);
+
                 insere_dispositivo(&lista, criar_dispositivo(id, descricao, tipo, status));
                 break;
+
             case 2:
                 printf("ID do dispositivo q deseja remover: "); scanf("%d", &id);
                 remove_dispositivo(&lista, id);
@@ -212,28 +249,10 @@ int main() {
                     break;
                 }
                 printf("ID do sensor: "); scanf("%d", &id);
-                do{
-                    printf("Tipo do sensor: ");
-                    scanf("%19s", subtipo_sensor);
-    
-                    minusculas(subtipo_sensor);
-                    
-                    valido = 0;
-                    i = 0;
-                    while(i < num_subsensores && valido == 0){
-                        if(strcmp(subtipo_sensor, subtipos_sensores[i]) == 0){
-                            valido = 1;
-                        }
-                        i++;
-                    }
-                    
-                    if(!valido){
-                        printf("Tipo de sensor invalido! Os tipos validos sao:\n");
-                        for(j = 0; j < num_subsensores; j++){
-                            printf("- %s\n", subtipos_sensores[j]);
-                        }
-                    }
-                }while(valido != 1);
+
+                //le a entrtada do usuario e verifica se o subtipo do sensor é valido
+                subtipo_validos(subtipo_sensor);
+
                 insere_sensor(dispositivo, criar_sensor(id, subtipo_sensor));
                 break;
             case 5:
