@@ -8,6 +8,7 @@
 typedef struct Sensor {
     int id;
     char tipo[100];
+    char subtipo[100];
     struct Sensor* proximo;
 } Sensor;
 
@@ -77,26 +78,38 @@ bool valida_id(Dispositivo* lista, int id) {
 void busca(Dispositivo* dispositivo){
     Dispositivo* lst;
     int verifica = 0, id, opcao;
+    char descricao[100];
 
     printf("Como deseja buscar um dispositivo na lista:\n1 - Por id\n2 - por Descricao\nDigite:");
     scanf("%d", &opcao);
 
     if(opcao == 1){
-        for(lst = dispositivo; lst != NULL; lst->proximo){
-            if(lts->id == id){
-                printf("ID: %d | descricao: %s | tipo: %s | status: %s\n", lista->id, lista->descricao, lista->tipo, lista->status);
-                valida = 1;
+        printf("Digite o id: ");
+        scanf("%d", &id);
+        for(lst = dispositivo; lst != NULL; lst = lst->proximo){
+            if(lst->id == id){
+                printf("ID: %d | descricao: %s | tipo: %s | status: %s\n", lst->id, lst->descricao, lst->tipo, lst->status);
+                verifica = 1;
             }
         }
-        if(valida == 0){
+        if(verifica == 0){
             printf("Nao foi possivel achar o dispositivo");
         }
-    }else{
-        
-    }
-    
 
-    
+    }else{
+        printf("Digite a descricao: ");
+        scanf("%19s", descricao);
+
+        for(lst = dispositivo; lst != NULL; lst = lst->proximo){
+            if(strcmp(lst->descricao, descricao) == 0) {
+                printf("ID: %d | descricao: %s | tipo: %s | status: %s\n", lst->id, lst->descricao, lst->tipo, lst->status);
+                verifica = 1;
+            }
+        }
+        if(verifica == 0){
+            printf("Nao foi possivel achar o dispositivo");
+        }
+    }
 }
 
 void listar_dispositivos(Dispositivo* lista) {
@@ -199,7 +212,7 @@ void condicoes_validas(char* status){
 }
 
 void tipo_validos(char* tipo_sensor) {
-    const char *subtipos_sensores[] = {"sensor", "atuador"};
+    const char *tipos_sensores[] = {"sensor", "atuador"};
     int num_tiposensores = sizeof(tipos_sensores) / sizeof(tipos_sensores[0]), valido, i;
 
     do{
@@ -254,6 +267,15 @@ void subtipo_validos(char* subtipo_sensor) {
     }while(valido != 1);
 }
 
+void libera(Dispositivo* lst) {
+    Dispositivo* aux = lst;
+    while(aux != NULL) {
+        Dispositivo* tmp = aux->proximo;
+        free(aux);
+        aux = tmp;
+    }
+}
+
 int main() {
     Dispositivo* lista = inicializa();
     int opicao, id;
@@ -288,7 +310,7 @@ int main() {
                 remove_dispositivo(&lista, id);
                 break;
             case 3:
-                busca_dispositivo(lista);
+                busca(lista);
                 break;
             case 4:
                 listar_dispositivos(lista);
@@ -305,7 +327,7 @@ int main() {
                 }
                 printf("ID do sensor: "); scanf("%d", &id);
 
-                tipo_valido(tipo_sensor);
+                tipo_validos(tipo_sensor);
                 //le a entrtada do usuario e verifica se o subtipo do sensor é valido
                 subtipo_validos(subtipo_sensor);
 
@@ -331,5 +353,6 @@ int main() {
         }
     } while (opicao != 7);
 
+    libera(lista);
     return 0;
 }
