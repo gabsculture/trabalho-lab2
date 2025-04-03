@@ -73,6 +73,32 @@ bool valida_id(Dispositivo* lista, int id) {
     }
     return true;
 }
+
+void busca(Dispositivo* dispositivo){
+    Dispositivo* lst;
+    int verifica = 0, id, opcao;
+
+    printf("Como deseja buscar um dispositivo na lista:\n1 - Por id\n2 - por Descricao\nDigite:");
+    scanf("%d", &opcao);
+
+    if(opcao == 1){
+        for(lst = dispositivo; lst != NULL; lst->proximo){
+            if(lts->id == id){
+                printf("ID: %d | descricao: %s | tipo: %s | status: %s\n", lista->id, lista->descricao, lista->tipo, lista->status);
+                valida = 1;
+            }
+        }
+        if(valida == 0){
+            printf("Nao foi possivel achar o dispositivo");
+        }
+    }else{
+        
+    }
+    
+
+    
+}
+
 void listar_dispositivos(Dispositivo* lista) {
     while (lista != NULL) {
         printf("ID: %d | descricao: %s | tipo: %s | status: %s\n",
@@ -172,12 +198,40 @@ void condicoes_validas(char* status){
     }while(valido != 1);
 }
 
+void tipo_validos(char* tipo_sensor) {
+    const char *subtipos_sensores[] = {"sensor", "atuador"};
+    int num_tiposensores = sizeof(tipos_sensores) / sizeof(tipos_sensores[0]), valido, i;
+
+    do{
+        printf("Tipo do sensor: ");
+        scanf("%19s", tipo_sensor);
+
+        minusculas(tipo_sensor);
+
+        valido = 0;
+        i = 0;
+        while(i < num_tiposensores && valido == 0){
+            if(strcmp(tipo_sensor, tipos_sensores[i]) == 0){
+                valido = 1;
+            }
+            i++;
+        }
+
+        if(!valido){
+            printf("Tipo de sensor invalido! Os tipos validos sao:\n");
+            for(i = 0; i < num_tiposensores; i++){
+                printf("- %s\n", tipos_sensores[i]);
+            }
+        }
+    }while(valido != 1);
+}
+
 void subtipo_validos(char* subtipo_sensor) {
     const char *subtipos_sensores[] = {"temperatura", "umidade", "movimento", "luminosidade", "pressao", "proximidade", "fumaca", "gas", "agua"};
     int num_subsensores = sizeof(subtipos_sensores) / sizeof(subtipos_sensores[0]), valido, i;
 
     do{
-        printf("Tipo do sensor: ");
+        printf("Subtipo do sensor: ");
         scanf("%19s", subtipo_sensor);
 
         minusculas(subtipo_sensor);
@@ -198,19 +252,17 @@ void subtipo_validos(char* subtipo_sensor) {
             }
         }
     }while(valido != 1);
-
 }
-
 
 int main() {
     Dispositivo* lista = inicializa();
     int opicao, id;
-    char descricao[100], tipo[100], status[100], subtipo_sensor[100];
+    char descricao[100], tipo[100], status[100], tipo_sensor[100], subtipo_sensor[100];
     bool verifica;
 
 
     do {
-        printf("\n1 - Inserir dispositivo\n2 - Remover dispositivo\n3 - Listar dispositivos\n4 - Adicionar sensor a um dispositivo\n5 - Listar sensores de um dispositivo\n6 - Sair\nopicao: ");
+        printf("\n1 - Inserir dispositivo\n2 - Remover dispositivo\n3 - Busca dispositivo\n4 - Listar dispositivos\n5 - Adicionar sensor a um dispositivo\n6 - Listar sensores de um dispositivo\n7 - Sair\nopicao: ");
         scanf("%d", &opicao);
 
         switch (opicao) {
@@ -236,9 +288,12 @@ int main() {
                 remove_dispositivo(&lista, id);
                 break;
             case 3:
-                listar_dispositivos(lista);
+                busca_dispositivo(lista);
                 break;
             case 4:
+                listar_dispositivos(lista);
+                break;
+            case 5:
                 printf("ID do dispositivo q deseja adicionar sensor: "); scanf("%d", &id);
                 Dispositivo* dispositivo = lista;
                 while (dispositivo != NULL && dispositivo->id != id) {
@@ -250,12 +305,13 @@ int main() {
                 }
                 printf("ID do sensor: "); scanf("%d", &id);
 
+                tipo_valido(tipo_sensor);
                 //le a entrtada do usuario e verifica se o subtipo do sensor é valido
                 subtipo_validos(subtipo_sensor);
 
                 insere_sensor(dispositivo, criar_sensor(id, subtipo_sensor));
                 break;
-            case 5:
+            case 6:
                 printf("ID do dispositivo q deseja ver os sensores: "); scanf("%d", &id);
                 dispositivo = lista;
                 while (dispositivo != NULL && dispositivo->id != id) {
@@ -267,13 +323,13 @@ int main() {
                 }
                 listar_sensores(dispositivo);
                 break;
-            case 6:
+            case 7:
                 printf("finalizado\n");
                 break;
             default:
                 printf("opicao invalida!\n");
         }
-    } while (opicao != 6);
+    } while (opicao != 7);
 
     return 0;
 }
