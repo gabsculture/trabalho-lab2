@@ -21,6 +21,12 @@ typedef struct Dispositivo {
     struct Dispositivo* proximo;
 } Dispositivo;
 
+typedef struct Evento{
+    char descricao[100];
+    char prioridade[100];
+    struct Evento* proximo;
+} Evento;
+
 Dispositivo* inicializa() { //inicia a lista vazia
     return NULL;
 }
@@ -135,6 +141,28 @@ Sensor* criar_sensor(int id, char* tipo) {
 void insere_sensor(Dispositivo* dispositivo, Sensor* novo) {
     novo->proximo = dispositivo->sensores;
     dispositivo->sensores = novo;
+}
+
+//verificar essa função
+voif remove_sensor(Dispositivo* dispositivo, int id){
+    Sentor* atual = dispositivo->sensores, anterior = NULL;
+
+    for(atual != NULL && atual->id != id){
+        anterior = atual;
+        atual = atual->proximo;
+    }
+
+    if (atual == NULL) {
+        printf("dispositivo nao encontrado!\n");
+        return;
+    }
+    if (anterior == NULL) {
+        *lista = atual->proximo;
+    } else {
+        anterior->proximo = atual->proximo;
+    }
+    free(atual);
+    printf("Sensor removido com sucesso!\n");
 }
 
 void listar_sensores(Dispositivo* dispositivo) {
@@ -276,6 +304,10 @@ void libera(Dispositivo* lst) {
     }
 }
 
+void insere_evento(Evento* evento,){
+    
+}
+
 int main() {
     Dispositivo* lista = inicializa();
     int opicao, id;
@@ -284,7 +316,7 @@ int main() {
 
 
     do {
-        printf("\n1 - Inserir dispositivo\n2 - Remover dispositivo\n3 - Busca dispositivo\n4 - Listar dispositivos\n5 - Adicionar sensor a um dispositivo\n6 - Listar sensores de um dispositivo\n7 - Sair\nopicao: ");
+        printf("\n1 - Inserir dispositivo\n2 - Remover dispositivo\n3 - Busca dispositivo\n4 - Listar dispositivos\n5 - Adicionar sensor a um dispositivo\n6 - Listar sensores de um dispositivo\n7 - Inserir evento\n8 - Executar Evento\n 9 - Sair\nopicao: ");
         scanf("%d", &opicao);
 
         switch (opicao) {
@@ -346,12 +378,18 @@ int main() {
                 listar_sensores(dispositivo);
                 break;
             case 7:
+                //insere evento
+                break;
+            case 8:
+                //executa evento;
+                break;
+            case 9:
                 printf("finalizado\n");
                 break;
             default:
                 printf("opicao invalida!\n");
         }
-    } while (opicao != 7);
+    } while (opicao != 9);
 
     libera(lista);
     return 0;
