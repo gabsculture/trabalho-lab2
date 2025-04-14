@@ -9,6 +9,7 @@ typedef struct Sensor {
     int id;
     char tipo[100];
     char subtipo[100];
+    float valor;
     struct Sensor* proximo;
 } Sensor;
 
@@ -24,6 +25,7 @@ typedef struct Dispositivo {
 typedef struct Evento{
     char descricao[100];
     char prioridade[100];
+    float valor;
     struct Evento* proximo;
 } Evento;
 
@@ -144,20 +146,26 @@ void insere_sensor(Dispositivo* dispositivo, Sensor* novo) {
 }
 
 //verificar essa função
-voif remove_sensor(Dispositivo* dispositivo, int id){
-    Sentor* atual = dispositivo->sensores, anterior = NULL;
+void remove_sensor(Dispositivo* dispositivo, int id){
+    if (dispositivo == NULL) {
+        printf("Dispositivo invalido!\n");
+        return;
+    }
 
-    for(atual != NULL && atual->id != id){
+    Sensor *atual = dispositivo->sensores;
+    Sensor *anterior = NULL;
+
+    while(atual != NULL && atual->id != id){
         anterior = atual;
         atual = atual->proximo;
     }
 
     if (atual == NULL) {
-        printf("dispositivo nao encontrado!\n");
+        printf("Sensor nao encontrado!\n");
         return;
     }
     if (anterior == NULL) {
-        *lista = atual->proximo;
+        dispositivo->sensores = atual->proximo;
     } else {
         anterior->proximo = atual->proximo;
     }
@@ -298,98 +306,138 @@ void subtipo_validos(char* subtipo_sensor) {
 void libera(Dispositivo* lst) {
     Dispositivo* aux = lst;
     while(aux != NULL) {
+        // Liberar sensores primeiro
+        Sensor* sensor = aux->sensores;
+        while(sensor != NULL) {
+            Sensor* tmp = sensor->proximo;
+            free(sensor);
+            sensor = tmp;
+        }
+
         Dispositivo* tmp = aux->proximo;
         free(aux);
         aux = tmp;
     }
 }
 
-void insere_evento(Evento* evento,){
+void insere_evento(Evento* evento){
     
+}
+
+Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
+    Dispositivo* lista = dispositivo;
+    int op, id;
+    char descricao[100], tipo[100], status[100];
+    bool verifica;
+
+    printf("\n1 - Inserir dispositivo\n2 - Remover dispositivo\n3 - Busca dispositivo\n4 - Listar dispositivos");
+    scanf("%d", &op);
+
+    switch(op){
+        case 1:
+            do{ //verifica se o id já não foi digitado
+                printf("ID: "); scanf("%d", &id);
+                verifica = valida_id(lista, id);
+            }while(verifica != true);
+
+            printf("descricao: "); scanf("%s", descricao);
+
+            //le a entrtada do usuario e verifica se o dispositivo é valido
+            confere_dispositivos(tipo);
+
+            //le a entrtada do usuario e verifica se a condição é valida
+            condicoes_validas(status);
+
+            insere_dispositivo(&lista, criar_dispositivo(id, descricao, tipo, status));
+            break;
+        case 2:
+            printf("ID do dispositivo q deseja remover: "); scanf("%d", &id);
+            remove_dispositivo(&lista, id);
+            break;
+        case 3:
+            busca(lista);
+            break;
+        case 4:
+            listar_dispositivos(lista);
+            break;
+        default:
+            printf("opicao invalida!\n");
+    }
+}
+
+void opera_sensores(Dispositivo* dispositivo){
+    Dispositivo* lista = dispositivo;
+    char tipo_sensor[100], subtipo_sensor[100];
+    int op ,id;
+
+    printf("\n1 - Adicionar sensor a um dispositivo\n2 - Remover um sensor\n3 - Listar sensores de um dispositivo");
+    scanf("%d", &op);
+
+    switch(op) {
+        case 1:
+            printf("ID do dispositivo q deseja adicionar sensor: "); scanf("%d", &id);
+            while (dispositivo != NULL && dispositivo->id != id) {
+                dispositivo = dispositivo->proximo;
+            }
+            if (dispositivo == NULL) {
+                printf("dispositivo nao encontrado!\n");
+                break;
+            }
+            printf("ID do sensor: "); scanf("%d", &id);
+
+            tipo_validos(tipo_sensor);
+            //le a entrtada do usuario e verifica se o subtipo do sensor é valido
+            subtipo_validos(subtipo_sensor);
+
+            insere_sensor(dispositivo, criar_sensor(id, subtipo_sensor));
+            break;
+        case 2:
+            printf("ID do dispositivo q deseja adicionar sensor: ");
+            scanf("%d", &id);
+
+            remove_sensor(dispositivo, id);
+            break;
+        case 3:
+            printf("ID do dispositivo q deseja ver os sensores: "); scanf("%d", &id);
+            while (dispositivo != NULL && dispositivo->id != id) {
+                dispositivo = dispositivo->proximo;
+            }
+            if (dispositivo == NULL) {
+                printf("dispositivo nao encontrado!\n");
+                break;
+            }
+            listar_sensores(dispositivo);
+            break;
+        default:
+            printf("opicao invalida!\n");
+    }
 }
 
 int main() {
     Dispositivo* lista = inicializa();
-    int opicao, id;
-    char descricao[100], tipo[100], status[100], tipo_sensor[100], subtipo_sensor[100];
-    bool verifica;
+    int opicao;
 
 
     do {
-        printf("\n1 - Inserir dispositivo\n2 - Remover dispositivo\n3 - Busca dispositivo\n4 - Listar dispositivos\n5 - Adicionar sensor a um dispositivo\n6 - Listar sensores de um dispositivo\n7 - Inserir evento\n8 - Executar Evento\n 9 - Sair\nopicao: ");
+        printf("\nCom o que deseja mexer: \n1 - Dispositivos\n2 - Sensores\n3 - Eventos\n4 - Sair\n\nEscolha uma opção");
         scanf("%d", &opicao);
 
         switch (opicao) {
             case 1:
-                do{ //verifica se o id já não foi digitado
-                    printf("ID: "); scanf("%d", &id);
-                    verifica = valida_id(lista, id);
-                }while(verifica != true); 
-                
-                printf("descricao: "); scanf("%s", descricao);
-
-                //le a entrtada do usuario e verifica se o dispositivo é valido
-                confere_dispositivos(tipo);
-
-                //le a entrtada do usuario e verifica se a condição é valida
-                condicoes_validas(status);
-
-                insere_dispositivo(&lista, criar_dispositivo(id, descricao, tipo, status));
+                lista = opera_dispositivos(lista);
                 break;
-
             case 2:
-                printf("ID do dispositivo q deseja remover: "); scanf("%d", &id);
-                remove_dispositivo(&lista, id);
+                opera_sensores(lista);
                 break;
             case 3:
-                busca(lista);
                 break;
             case 4:
-                listar_dispositivos(lista);
-                break;
-            case 5:
-                printf("ID do dispositivo q deseja adicionar sensor: "); scanf("%d", &id);
-                Dispositivo* dispositivo = lista;
-                while (dispositivo != NULL && dispositivo->id != id) {
-                    dispositivo = dispositivo->proximo;
-                }
-                if (dispositivo == NULL) {
-                    printf("dispositivo nao encontrado!\n");
-                    break;
-                }
-                printf("ID do sensor: "); scanf("%d", &id);
-
-                tipo_validos(tipo_sensor);
-                //le a entrtada do usuario e verifica se o subtipo do sensor é valido
-                subtipo_validos(subtipo_sensor);
-
-                insere_sensor(dispositivo, criar_sensor(id, subtipo_sensor));
-                break;
-            case 6:
-                printf("ID do dispositivo q deseja ver os sensores: "); scanf("%d", &id);
-                dispositivo = lista;
-                while (dispositivo != NULL && dispositivo->id != id) {
-                    dispositivo = dispositivo->proximo;
-                }
-                if (dispositivo == NULL) {
-                    printf("dispositivo nao encontrado!\n");
-                    break;
-                }
-                listar_sensores(dispositivo);
-                break;
-            case 7:
-                //insere evento
-                break;
-            case 8:
-                //executa evento;
-                break;
-            case 9:
                 printf("finalizado\n");
                 break;
             default:
                 printf("opicao invalida!\n");
         }
-    } while (opicao != 9);
+    } while (opicao != 4);
 
     libera(lista);
     return 0;
