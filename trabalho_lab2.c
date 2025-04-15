@@ -22,12 +22,17 @@ typedef struct Dispositivo {
     struct Dispositivo* proximo;
 } Dispositivo;
 
-typedef struct Evento{
+typedef struct Evento {
     char descricao[100];
     char prioridade[100];
     float valor;
     struct Evento* proximo;
 } Evento;
+
+typedef struct Fila {
+    Evento* inicio;
+    Evento* fim;
+} fila;
 
 Dispositivo* inicializa() { //inicia a lista vazia
     return NULL;
