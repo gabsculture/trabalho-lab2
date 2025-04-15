@@ -60,6 +60,17 @@ Fila* cria(void) {
     return fila;
 }
 
+void insere_fila(Fila* fila, int v) {
+    Evento* novo = (Evento*(malloc(sizeof(Evento));
+    novo->proximo = NULL;
+    if(fila->fim == NULL) {
+        fila->fim->proximo = novo;
+    } else {
+        fila->inicio = novo;
+    }
+    fila->fim = novo;
+} 
+
 void insere_dispositivo(Dispositivo** lista, Dispositivo* novo) {
     novo->proximo = *lista;
     *lista = novo;
