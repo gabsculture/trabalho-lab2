@@ -70,6 +70,22 @@ void insere_fila(Fila* fila, int v) {
     }
     fila->fim = novo;
 } 
+int remove_da_fila(Fila* fila){
+    Evento* evento;
+    int v;
+    if(fila->inicio == NULL) {
+        printf("Fila vazia!");
+        exit(1);
+    }
+    t = fila->inicio;
+    v = t->descricao;
+    fila->inicio = t->proximo;
+    if(fila->inicio == NULL) {
+        fila->fim = NULL;
+        free(t);
+        return v;
+    }
+}
 
 void insere_dispositivo(Dispositivo** lista, Dispositivo* novo) {
     novo->proximo = *lista;
