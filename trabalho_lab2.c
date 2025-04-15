@@ -53,6 +53,13 @@ Dispositivo* criar_dispositivo(int id, char* descricao, char* tipo, char* status
     return novo;
 }
 
+Fila* cria(void) {
+    Fila* fila = (Fila*(malloc(sizeof(Fila));
+    fila->inicio = NULL;
+    fila->fim = NULL;
+    return fila;
+}
+
 void insere_dispositivo(Dispositivo** lista, Dispositivo* novo) {
     novo->proximo = *lista;
     *lista = novo;
