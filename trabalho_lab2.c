@@ -32,7 +32,7 @@ typedef struct Evento {
 typedef struct Fila {
     Evento* inicio;
     Evento* fim;
-} fila;
+} Fila;
 
 Dispositivo* inicializa() { //inicia a lista vazia
     return NULL;
@@ -54,14 +54,14 @@ Dispositivo* criar_dispositivo(int id, char* descricao, char* tipo, char* status
 }
 
 Fila* cria(void) {
-    Fila* fila = (Fila*(malloc(sizeof(Fila));
+    Fila* fila = (Fila*)(malloc(sizeof(Fila)));
     fila->inicio = NULL;
     fila->fim = NULL;
     return fila;
 }
 
 void insere_fila(Fila* fila, int v) {
-    Evento* novo = (Evento*(malloc(sizeof(Evento));
+    Evento* novo = (Evento*)(malloc(sizeof(Evento)));
     novo->proximo = NULL;
     if(fila->fim == NULL) {
         fila->fim->proximo = novo;
@@ -77,14 +77,14 @@ int remove_da_fila(Fila* fila){
         printf("Fila vazia!");
         exit(1);
     }
-    t = fila->inicio;
-    v = t->descricao;
-    fila->inicio = t->proximo;
+    evento = fila->inicio;
+    v = evento->descricao;
+    fila->inicio = evento->proximo;
     if(fila->inicio == NULL) {
         fila->fim = NULL;
-        free(t);
-        return v;
     }
+    free(evento);
+    return v;
 }
 
 void insere_dispositivo(Dispositivo** lista, Dispositivo* novo) {
@@ -358,9 +358,8 @@ void libera(Dispositivo* lst) {
         aux = tmp;
     }
 }
-
 void insere_evento(Evento* evento){
-    
+
 }
 
 Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
@@ -404,7 +403,7 @@ Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
     }
 }
 
-void opera_sensores(Dispositivo* dispositivo){
+Dispositivo *opera_sensores(Dispositivo *dispositivo){
     Dispositivo* lista = dispositivo;
     char tipo_sensor[100], subtipo_sensor[100];
     int op ,id;
@@ -452,6 +451,8 @@ void opera_sensores(Dispositivo* dispositivo){
     }
 }
 
+
+
 int main() {
     Dispositivo* lista = inicializa();
     int opicao;
@@ -466,7 +467,7 @@ int main() {
                 lista = opera_dispositivos(lista);
                 break;
             case 2:
-                opera_sensores(lista);
+                lista = opera_sensores(lista);
                 break;
             case 3:
                 break;
