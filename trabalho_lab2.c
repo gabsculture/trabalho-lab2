@@ -24,14 +24,18 @@ typedef struct Dispositivo {
 
 typedef struct Evento {
     char descricao[100];
-    char prioridade[100];
+    char prioridade[10];
     float valor;
+    Sensor* sensores;
+    Dispositivo* dispositivos;
     struct Evento* proximo;
 } Evento;
 
 typedef struct Fila {
+    struct Fila* proximo;
     Evento* inicio;
     Evento* fim;
+    int tamanho;
 } Fila;
 
 Dispositivo* inicializa() { //inicia a lista vazia
@@ -53,38 +57,41 @@ Dispositivo* criar_dispositivo(int id, char* descricao, char* tipo, char* status
     return novo;
 }
 
-Fila* cria(void) {
-    Fila* fila = (Fila*)(malloc(sizeof(Fila)));
+Fila* cria(void) { //aloca a memoria para a fila e cria a fila vazia
+    Fila* fila = malloc(sizeof(Fila));
     fila->inicio = NULL;
     fila->fim = NULL;
+    fila->tamanho = 0;
     return fila;
 }
 
-void insere_fila(Fila* fila, int v) {
-    Evento* novo = (Evento*)(malloc(sizeof(Evento)));
-    novo->proximo = NULL;
-    if(fila->fim == NULL) {
-        fila->fim->proximo = novo;
-    } else {
-        fila->inicio = novo;
+void insere_fila(Fila* fila, Evento* evento){ //insere os eventos na fila
+    if(fila->fim == NULL){   //verifica se tem alguem na fila
+        fila->fim = evento;
+        fila->inicio = evento;
+    }else { //caso não estaja vazia ela vai adicionar o evento no final
+        fila->fim->proximo = evento;
+        fila->fim = evento;
     }
-    fila->fim = novo;
-} 
-int remove_da_fila(Fila* fila){
-    Evento* evento;
-    int v;
-    if(fila->inicio == NULL) {
-        printf("Fila vazia!");
-        exit(1);
+    evento->proximo = NULL;
+    fila->tamanho++;
+}
+
+Evento* remove_da_fila(Fila* fila){
+    Evento *remover = fila->inicio; //pega o inicio da fila, somente para exibir depois
+
+    if(fila->inicio != NULL){ //caso a fila não esteja vazia
+        fila->inicio = fila->inicio->proximo; //O novo inicio sera o proximo da lista
+    }else {
+        printf("Fila vazia!\n");
     }
-    evento = fila->inicio;
-    v = evento->descricao;
-    fila->inicio = evento->proximo;
-    if(fila->inicio == NULL) {
+
+    if(fila->fim == NULL){ // caso a fila fique fazia ira atualizar o ponteiro do fim
         fila->fim = NULL;
     }
-    free(evento);
-    return v;
+    fila->tamanho--;
+    return remover;
+
 }
 
 void insere_dispositivo(Dispositivo** lista, Dispositivo* novo) {
@@ -167,7 +174,7 @@ void listar_dispositivos(Dispositivo* lista) {
     }
 }
 
-Sensor* criar_sensor(int id, char* tipo) {
+Sensor* criar_sensor(int id, char* tipo, char* subtipo, float valor) {
     Sensor* novo = (Sensor*)malloc(sizeof(Sensor));
     if (novo == NULL) {
         printf("erro!\n");
@@ -175,6 +182,8 @@ Sensor* criar_sensor(int id, char* tipo) {
     }
     novo->id = id;
     strcpy(novo->tipo, tipo);
+    strcpy(novo->subtipo, subtipo);
+    novo->valor = valor;
     novo->proximo = NULL;
     return novo;
 }
@@ -219,7 +228,7 @@ void listar_sensores(Dispositivo* dispositivo) {
         return;
     }
     while (atual != NULL) {
-        printf("ID sensor: %d | tipo: %s\n", atual->id, atual->tipo);
+        printf("ID sensor: %d | tipo: %s | subtipo: %s |valor: %f |\n", atual->id, atual->tipo, atual->subtipo, atual->valor);
         atual = atual->proximo;
     }
 }
@@ -358,9 +367,6 @@ void libera(Dispositivo* lst) {
         aux = tmp;
     }
 }
-void insere_evento(Evento* evento){
-
-}
 
 Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
     Dispositivo* lista = dispositivo;
@@ -400,6 +406,8 @@ Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
             break;
         default:
             printf("opicao invalida!\n");
+
+        return lista;
     }
 }
 
@@ -407,6 +415,7 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
     Dispositivo* lista = dispositivo;
     char tipo_sensor[100], subtipo_sensor[100];
     int op ,id;
+    float valor;
 
     printf("\n1 - Adicionar sensor a um dispositivo\n2 - Remover um sensor\n3 - Listar sensores de um dispositivo");
     scanf("%d", &op);
@@ -427,7 +436,14 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
             //le a entrtada do usuario e verifica se o subtipo do sensor é valido
             subtipo_validos(subtipo_sensor);
 
-            insere_sensor(dispositivo, criar_sensor(id, subtipo_sensor));
+            if(subtipo_sensor == "umidade" || subtipo_sensor == "temperatura") {
+                printf("\nDigite o valor do sensor\n");
+                scanf("%f", &valor);
+            }else{
+                valor = 0;
+            }
+
+            insere_sensor(dispositivo, criar_sensor(id, tipo_sensor,subtipo_sensor, valor));
             break;
         case 2:
             printf("ID do dispositivo q deseja adicionar sensor: ");
@@ -451,7 +467,9 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
     }
 }
 
+void insere_evento(Evento* evento){
 
+}
 
 int main() {
     Dispositivo* lista = inicializa();
