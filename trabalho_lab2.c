@@ -31,8 +31,7 @@ typedef struct Evento {
     struct Evento* proximo;
 } Evento;
 
-typedef struct Fila {
-    struct Fila* proximo;
+typedef struct Fila{
     Evento* inicio;
     Evento* fim;
     int tamanho;
@@ -466,7 +465,7 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
     }
 }
 
-Evento* criar_evento(Dispositivo* dispositivo, int id, int id_sensor, char descricao, char prioridade, float valor){
+Evento* criar_evento(Dispositivo* dispositivo, int id, int id_sensor, char* descricao, char* prioridade, float valor){
     Evento* novo = (Evento*)malloc(sizeof(Evento));
     Dispositivo* lista = dispositivo;
     Sensor* sensor = NULL;
@@ -533,8 +532,6 @@ void insere_evento(Dispositivo* dispositivo, Fila* alta, Fila* media, Fila* baix
 }
 
 void executa_evento(Fila* alta, Fila* media, Fila* baixa){
-    Dispositivo* dispositivo;
-    Sensor* sensor = NULL;
     Evento* evento = NULL;
 
     if(alta->inicio != NULL) { //verifica se existe algo na lista e executa o comando de remover fila
@@ -550,25 +547,24 @@ void executa_evento(Fila* alta, Fila* media, Fila* baixa){
     if(evento != NULL){ //caso existir um evento vai imprimir qual foi
       printf("\nO evento '%s' foi executado", evento->descricao);
         if(evento->sensores->id != -1){ //acha o sensor que foi vai ser alterado no evento
-            sensor = dispositivo->sensores;
+            Sensor* sensor = evento->dispositivos->sensores;
             while(sensor != NULL && sensor->id != evento->sensores->id){ //percorre por todos os sensores até achar o id correspondente
                 sensor = sensor->proximo;
             }
             if(sensor == NULL) {
                 printf("Sensor nao encontrado!\n");
             }
+            if(sensor != NULL){ //caso esse sensor exista ele troca o valor
+                sensor->valor = evento->valor;
+            }
         }
-        if(sensor != NULL){ //caso esse sensor exista ele troca o valor
-            sensor->valor = evento->valor;
-        }
+      
         free(evento);
-    }else{
-        printf("Evento não executado");
     }
 }
 
-void listar_eventos(){
-    Fila *alta, *media, *baixa;
+void listar_eventos(Fila *alta, Fila *media, Fila *baixa){
+    //Fila *alta, *media, *baixa;
     printf("\n--- Eventos de prioridade: Alta (%d) ---\n", alta->tamanho);
     Evento* atual = alta->inicio;
     while (atual != NULL) {
@@ -622,7 +618,7 @@ Dispositivo* opera_evento(Dispositivo* dispositivo, Fila* alta, Fila* media, Fil
                 executa_evento(alta, media, baixa);
                 break;
             case 3:
-                listar_eventos();
+                listar_eventos(alta, media, baixa);
                 break;
             case 4:
                 printf("Saindo!");
@@ -680,13 +676,13 @@ int main() {
 
         switch (opicao) {
             case 1:
-                lista = opera_dispositivos(lista);
+                lista = opera_dispositivos(lista); //faz as operações com dispositivos e retorna a lista atualizada
                 break;
             case 2:
-                lista = opera_sensores(lista);
+                lista = opera_sensores(lista); //faz as operações com sensores e retorna na lista atualizada 
                 break;
             case 3:
-                opera_evento(lista, alta, media, baixa);
+                opera_evento(lista, alta, media, baixa); //faz as operações com os eventos 
                 break;
             case 4:
                 printf("finalizado\n");
@@ -695,7 +691,8 @@ int main() {
                 printf("opição invalida!\n");
         }
     } while (opicao != 4);
-
+    
+    //libera as listas e as filas
     libera(lista);
     liberar_todas_filas(alta, media, baixa);
 
