@@ -64,33 +64,60 @@ Fila* cria(void) { //aloca a memoria para a fila e cria a fila vazia
     return fila;
 }
 
-void insere_fila(Fila* fila, Evento* evento){ //insere os eventos na fila
-    if(fila->fim == NULL){   //verifica se tem alguém na fila
-        fila->fim = evento;
+void insere_fila(Fila *fila, Evento *evento) {
+    // Se a fila estiver vazia
+    if (fila->inicio == NULL) {
         fila->inicio = evento;
-    }else { //caso não estaja vazia ela vai adicionar o evento no final
+        fila->fim = evento;
+    } else if (strcmp(evento->prioridade, "alta") == 0) {
+        // Inserção no início
+        evento->proximo = fila->inicio;
+        fila->inicio = evento;
+    } else if (strcmp(evento->prioridade, "media") == 0) {
+        // Inserção após os "altas", antes dos "baixas"
+        Evento *atual = fila->inicio;
+        Evento *anterior = NULL;
+
+        while (atual != NULL && strcmp(atual->prioridade, "alta") == 0) {
+            anterior = atual;
+            atual = atual->proximo;
+        }
+
+        if (anterior == NULL) {
+            evento->proximo = fila->inicio;
+            fila->inicio = evento;
+        } else {
+            evento->proximo = anterior->proximo;
+            anterior->proximo = evento;
+        }
+
+        if (evento->proximo == NULL) {
+            fila->fim = evento;
+        }
+
+    } else {
+        // Prioridade baixa: inserção no fim
         fila->fim->proximo = evento;
         fila->fim = evento;
     }
-    evento->proximo = NULL;
+
     fila->tamanho++;
 }
 
-Evento* remove_da_fila(Fila* fila){
-    Evento *remover = fila->inicio; //pega o inicio da fila, somente para exibir depois
 
-    if(fila->inicio != NULL){ //caso a fila não esteja vazia
-        fila->inicio = fila->inicio->proximo; //O novo inicio sera o proximo da lista
-    }else {
+Evento* remove_da_fila(Fila *fila) {
+    Evento *remover = fila->inicio;
+
+    if (remover != NULL) {
+        fila->inicio = fila->inicio->proximo;
+        if (fila->inicio == NULL) {
+            fila->fim = NULL;
+        }
+        fila->tamanho--;
+    } else {
         printf("Fila vazia!\n");
     }
-
-    if(fila->fim == NULL){ // caso a fila fique fazia ira atualizar o ponteiro do fim
-        fila->fim = NULL;
-    }
-    fila->tamanho--;
     return remover;
-
 }
 
 void insere_dispositivo(Dispositivo** lista, Dispositivo* novo) {
@@ -382,7 +409,8 @@ Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
                 verifica = valida_id(lista, id);
             }while(verifica != true);
 
-            printf("descricao: "); scanf("%s", descricao);
+            printf("descricao: ");
+            scanf(" %99[^\n]",descricao);
 
             //le a entrtada do usuario e verifica se o dispositivo é valido
             confere_dispositivos(tipo);
@@ -404,9 +432,8 @@ Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
             break;
         default:
             printf("opicao invalida!\n");
-
-        return lista;
     }
+    return lista;
 }
 
 Dispositivo *opera_sensores(Dispositivo *dispositivo){
@@ -465,28 +492,36 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
     }
 }
 
-Evento* criar_evento(Dispositivo* dispositivo, int id, int id_sensor, char* descricao, char* prioridade, float valor){
+Evento* criar_evento(Dispositivo* dispositivo, int id, int id_sensor, char* descricao, char* prioridade, float valor) {
     Evento* novo = (Evento*)malloc(sizeof(Evento));
     Dispositivo* lista = dispositivo;
     Sensor* sensor = NULL;
 
-    while(lista != NULL && lista->id != id){
+    // Buscar o dispositivo com o ID fornecido
+    while (lista != NULL && lista->id != id) {
         lista = lista->proximo;
     }
-    if(lista == NULL) {
+    if (lista == NULL) {
         printf("dispositivo nao encontrado!\n");
+        free(novo); // Libera a memória alocada antes de retornar
+        return NULL;
     }
 
-    if(id_sensor != -1) {
-        sensor = dispositivo->proximo;
-        while(sensor != NULL && sensor->id != id_sensor) {
-            sensor = sensor->proximo;
+    // Se houver id_sensor, buscar o sensor associado ao dispositivo
+    if (id_sensor != -1) {
+        Sensor* sensor_atual = lista->sensores;  // Acessa a lista de sensores do dispositivo
+        while (sensor_atual != NULL && sensor_atual->id != id_sensor) {
+            sensor_atual = sensor_atual->proximo;
         }
-        if(sensor == NULL) {
+        if (sensor_atual == NULL) {
             printf("Sensor nao encontrado!\n");
+            free(novo); // Libera a memória alocada antes de retornar
+            return NULL;
         }
+        sensor = sensor_atual;
     }
 
+    // Preenche o evento
     novo->dispositivos = lista;
     novo->sensores = sensor;
     strcpy(novo->descricao, descricao);
@@ -495,8 +530,6 @@ Evento* criar_evento(Dispositivo* dispositivo, int id, int id_sensor, char* desc
     novo->proximo = NULL;
 
     return novo;
-
-
 }
 
 void insere_evento(Dispositivo* dispositivo, Fila* alta, Fila* media, Fila* baixa){
@@ -510,8 +543,7 @@ void insere_evento(Dispositivo* dispositivo, Fila* alta, Fila* media, Fila* baix
     printf("Digite o ID do sensor ligado ao dispositivo(caso o dispositivo não tenha id digite -1)");
     scanf("%d", &id_sensor);
     printf("Digite a descrição do dispositivo: ");
-    scanf("%s", descricao);
-    do { //confere prioridade do dispositivo
+scanf(" %99[^\n]",descricao);    do { //confere prioridade do dispositivo
         printf("Digite a prioridade do dispositivo(alta, media, baixa): ");
         scanf("%s", prioridade);
     }while(strcmp(prioridade, "alta") != 0 && strcmp(descricao, "media") != 0 && strcmp(prioridade, "baixa") != 0 );
@@ -599,37 +631,35 @@ void listar_eventos(Fila *alta, Fila *media, Fila *baixa){
     }
 }
 
-Dispositivo* opera_evento(Dispositivo* dispositivo, Fila* alta, Fila* media, Fila* baixa){
+void opera_evento(Dispositivo* dispositivo, Fila* alta, Fila* media, Fila* baixa) {
     int opicao;
 
     if(alta == NULL || media == NULL || baixa == NULL) {
         printf("Erro: filas não inicializadas!\n");
-        return dispositivo;
+        return;
     }
 
-    do{
+    do {
         printf("\nDigite uma das opções: \n1 - insere novo evento\n2 - Executa evento\n3 - listar eventos\n4 - Sair");
         scanf("%d", &opicao);
         switch(opicao) {
             case 1:
                 insere_evento(dispositivo, alta, media, baixa);
-                break;
+            break;
             case 2:
                 executa_evento(alta, media, baixa);
-                break;
+            break;
             case 3:
                 listar_eventos(alta, media, baixa);
-                break;
+            break;
             case 4:
-                printf("Saindo!");
-                break;
+                printf("Saindo");
+            break;
             default:
                 printf("Digite um valor valido");
-                break;
+            break;
         }
-    }while(opicao != 4);
-
-    return dispositivo;
+    } while(opicao != 4);
 }
 
 void liberar_fila(Fila* fila) {
@@ -679,10 +709,10 @@ int main() {
                 lista = opera_dispositivos(lista); //faz as operações com dispositivos e retorna a lista atualizada
                 break;
             case 2:
-                lista = opera_sensores(lista); //faz as operações com sensores e retorna na lista atualizada 
+                lista = opera_sensores(lista); //faz as operações com sensores e retorna na lista atualizada
                 break;
             case 3:
-                opera_evento(lista, alta, media, baixa); //faz as operações com os eventos 
+                opera_evento(lista, alta, media, baixa); //faz as operações com os eventos
                 break;
             case 4:
                 printf("finalizado\n");
@@ -691,7 +721,7 @@ int main() {
                 printf("opição invalida!\n");
         }
     } while (opicao != 4);
-    
+
     //libera as listas e as filas
     libera(lista);
     liberar_todas_filas(alta, media, baixa);
