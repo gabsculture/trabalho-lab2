@@ -695,6 +695,7 @@ void liberar_todas_filas(Fila* alta, Fila* media, Fila* baixa){
 }
 
 void persisteDadosEmArquivo() {}
+void comparaTempo() {}
 
 int main() {
     Dispositivo* lista = inicializa();
