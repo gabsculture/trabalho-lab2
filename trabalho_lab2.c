@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+FILE *arquivoCsv;
 
 typedef struct Sensor {
     int id;
@@ -691,6 +692,7 @@ void liberar_todas_filas(Fila* alta, Fila* media, Fila* baixa){
     }
 }
 
+void persisteDadosEmArquivo() {}
 
 int main() {
     Dispositivo* lista = inicializa();
