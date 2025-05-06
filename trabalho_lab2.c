@@ -4,6 +4,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <time.h>
+
 FILE *arquivoCsv;
 
 typedef struct Sensor {
