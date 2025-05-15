@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <time.h>
+#include <sys/time.h>
 
 FILE *arquivoCsv;
 
