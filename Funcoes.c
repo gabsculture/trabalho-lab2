@@ -514,8 +514,9 @@ void insere_evento(Dispositivo* dispositivo, Fila* alta, Fila* media, Fila* baix
     scanf("%d", &id);
     printf("Digite o ID do sensor ligado ao dispositivo(caso o dispositivo não tenha id digite -1)");
     scanf("%d", &id_sensor);
-    printf("Digite a descrição do dispositivo: ");
-scanf(" %99[^\n]",descricao);    do { //confere prioridade do dispositivo
+    printf("Digite a descrição do evento: ");
+    scanf(" %99[^\n]",descricao);
+    do { //confere prioridade do dispositivo
         printf("Digite a prioridade do dispositivo(alta, media, baixa): ");
         scanf("%s", prioridade);
     }while(strcmp(prioridade, "alta") != 0 && strcmp(descricao, "media") != 0 && strcmp(prioridade, "baixa") != 0 );
