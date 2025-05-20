@@ -5,7 +5,6 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <time.h>
-#include <sys/time.h>
 
 FILE *arquivoCsv;
 
@@ -434,7 +433,7 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
             //le a entrtada do usuario e verifica se o subtipo do sensor é valido
             subtipo_validos(subtipo_sensor);
 
-            if(subtipo_sensor == "umidade" || subtipo_sensor == "temperatura") {
+            if(strcmp(tipo_sensor, "sensor") == 0) {
                 printf("\nDigite o valor do sensor\n");
                 scanf("%f", &valor);
             }else{
@@ -666,6 +665,8 @@ void liberar_todas_filas(Fila* alta, Fila* media, Fila* baixa){
 }
 
 void persisteDadosEmArquivo() {}
+
+
 void pegaTempo(char *buffer, size_t tamanho) {
     struct timeval tv;
     struct tm *tm_info;
