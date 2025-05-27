@@ -693,4 +693,18 @@ void incluirValorSensor(int idDispositivo) {
     printf("Valor inserido com sucesso!\n");
 }
 
+void incluirValorAtuador(int idDispositivo, float valor) {
+    if (totalRegistros >= MAX_VALORES) {
+        printf("Limite de registros atingido.\n");
+        return;
+    }
+
+    RegistroValor novo;
+    pegaTempo(novo.timestamp, sizeof(novo.timestamp));
+    novo.valor = valor;
+    novo.idDispositivo = idDispositivo;
+
+    registros[totalRegistros++] = novo;
+}
+
 void comparaTempo() {}
