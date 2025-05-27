@@ -6,7 +6,7 @@ typedef struct Sensor {
     int id;
     char tipo[100];
     char subtipo[100];
-    float valor;
+    Valor* valor;
     struct Sensor* proximo;
 } Sensor;
 
@@ -35,11 +35,10 @@ typedef struct Fila{
 } Fila;
 
 
-typedef struct {
+typedef struct Valor {
     char timestamp[20];
     float valor;
-    int idDispositivo;
-} RegistroValor;
+} Valor;
 
 extern RegistroValor registros[MAX_VALORES];
 extern int totalRegistros;
