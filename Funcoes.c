@@ -561,7 +561,7 @@ void executa_evento(Fila* alta, Fila* media, Fila* baixa){
             }
             if(sensor != NULL){ //caso esse sensor exista ele troca o valor
                 sensor->valor = evento->valor;
-                incluirTimeStamp();
+                incluirTimeStamp(sensor);
             }
         }
 
@@ -676,9 +676,7 @@ void incluirTimeStamp(Sensor* sensor) {
         printf("limite de registros atingido.\n");
         return;
     }
-
-    Valor novo;
-    pegaTempo(novo.timestamp, sizeof(novo.timestamp));
+    pegaTempo(sensor->valor->timestamp, sizeof(sensor->valor->timestamp));
     sensor.valor = valor;
     registros[totalRegistros++] = novo;
 }
