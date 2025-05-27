@@ -667,18 +667,10 @@ void liberar_todas_filas(Fila* alta, Fila* media, Fila* baixa){
 void persisteDadosEmArquivo() {}
 
 
-void pegaTempo(char *buffer, size_t tamanho) {
-    struct timeval tv;
-    struct tm *tm_info;
-
-    gettimeofday(&tv, NULL);
-    tm_info = localtime(&tv.tv_sec);
-
-
+void pegaTempo(char *buffer, int tamanho) {
+    time_t agora = time(NULL);
+    struct tm *tm_info = localtime(&agora);
     strftime(buffer, tamanho, "%Y-%m-%d %H:%M:%S", tm_info);
-    int millis = tv.tv_usec / 1000;
-
-    snprintf(buffer + strlen(buffer), tamanho - strlen(buffer), ".%03d", millis);
 }
 
 void comparaTempo() {}
