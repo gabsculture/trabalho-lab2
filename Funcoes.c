@@ -707,4 +707,37 @@ void incluirValorAtuador(int idDispositivo, float valor) {
     registros[totalRegistros++] = novo;
 }
 
-void comparaTempo() {}
+int compararCrescente(const void *a, const void *b) {
+    return strcmp(((RegistroValor*)a)->timestamp, ((RegistroValor*)b)->timestamp);
+}
+
+int compararDecrescente(const void *a, const void *b) {
+    return strcmp(((RegistroValor*)b)->timestamp, ((RegistroValor*)a)->timestamp);
+}
+
+void listarValoresDispositivo(int idDispositivo, int ordemCrescente) {
+    RegistroValor copia[MAX_VALORES];
+    int count = 0;
+
+    for (int i = 0; i < totalRegistros; i++) {
+        if (registros[i].idDispositivo == idDispositivo) {
+            copia[count++] = registros[i];
+        }
+    }
+
+    if (count == 0) {
+        printf("ntnhum valor encontrado para o dispositivo %d.\n", idDispositivo);
+        return;
+    }
+
+    if (ordemCrescente) {
+        qsort(copia, count, sizeof(RegistroValor), compararCrescente);
+    } else {
+        qsort(copia, count, sizeof(RegistroValor), compararDecrescente);
+    }
+
+    printf("vlores do dispositivo %d (%s):\n", idDispositivo, ordemCrescente ? "crescente" : "decrescente");
+    for (int i = 0; i < count; i++) {
+        printf("[%s] Valor: %.2f\n", copia[i].timestamp, copia[i].valor);
+    }
+}
