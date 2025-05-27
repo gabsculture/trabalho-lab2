@@ -673,4 +673,24 @@ void pegaTempo(char *buffer, int tamanho) {
     strftime(buffer, tamanho, "%Y-%m-%d %H:%M:%S", tm_info);
 }
 
+void incluirValorSensor(int idDispositivo) {
+    if (totalRegistros >= MAX_VALORES) {
+        printf("limite de registros atingido.\n");
+        return;
+    }
+
+    float valor;
+    printf("informe o valor do sensor: ");
+    scanf("%f", &valor);
+
+    RegistroValor novo;
+    pegaTempo(novo.timestamp, sizeof(novo.timestamp));
+    novo.valor = valor;
+    novo.idDispositivo = idDispositivo;
+
+    registros[totalRegistros++] = novo;
+
+    printf("Valor inserido com sucesso!\n");
+}
+
 void comparaTempo() {}
