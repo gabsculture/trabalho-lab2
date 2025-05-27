@@ -665,59 +665,29 @@ void liberar_todas_filas(Fila* alta, Fila* media, Fila* baixa){
     }
 }
 
-void persisteDadosEmArquivo() {}
-
-
 void pegaTempo(char *buffer, int tamanho) {
     time_t agora = time(NULL);
     struct tm *tm_info = localtime(&agora);
     strftime(buffer, tamanho, "%Y-%m-%d %H:%M:%S", tm_info);
 }
 
-void incluirTimeStamp(int idDispositivo) {
+void incluirTimeStamp(Sensor* sensor) {
     if (totalRegistros >= MAX_VALORES) {
         printf("limite de registros atingido.\n");
         return;
     }
 
-    RegistroValor novo;
+    Valor novo;
     pegaTempo(novo.timestamp, sizeof(novo.timestamp));
-    novo.valor = valor;
-    novo.idDispositivo = idDispositivo;
+    sensor.valor = valor;
     registros[totalRegistros++] = novo;
 }
 
 int compararCrescente(const void *a, const void *b) {
-    return strcmp(((RegistroValor*)a)->timestamp, ((RegistroValor*)b)->timestamp);
+    return strcmp(((Valor*)a)->timestamp, ((Valor*)b)->timestamp);
 }
 
 int compararDecrescente(const void *a, const void *b) {
-    return strcmp(((RegistroValor*)b)->timestamp, ((RegistroValor*)a)->timestamp);
+    return strcmp(((Valor*)b)->timestamp, ((Valor*)a)->timestamp);
 }
 
-void listarValoresDispositivo(int idDispositivo, int ordemCrescente) {
-    RegistroValor copia[MAX_VALORES];
-    int count = 0;
-
-    for (int i = 0; i < totalRegistros; i++) {
-        if (registros[i].idDispositivo == idDispositivo) {
-            copia[count++] = registros[i];
-        }
-    }
-
-    if (count == 0) {
-        printf("ntnhum valor encontrado para o dispositivo %d.\n", idDispositivo);
-        return;
-    }
-
-    if (ordemCrescente) {
-        qsort(copia, count, sizeof(RegistroValor), compararCrescente);
-    } else {
-        qsort(copia, count, sizeof(RegistroValor), compararDecrescente);
-    }
-
-    printf("vlores do dispositivo %d (%s):\n", idDispositivo, ordemCrescente ? "crescente" : "decrescente");
-    for (int i = 0; i < count; i++) {
-        printf("[%s] Valor: %.2f\n", copia[i].timestamp, copia[i].valor);
-    }
-}
