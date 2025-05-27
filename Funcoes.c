@@ -687,20 +687,6 @@ void incluirTimeStamp(int idDispositivo) {
     registros[totalRegistros++] = novo;
 }
 
-void incluirValorAtuador(int idDispositivo, float valor) {
-    if (totalRegistros >= MAX_VALORES) {
-        printf("Limite de registros atingido.\n");
-        return;
-    }
-
-    RegistroValor novo;
-    pegaTempo(novo.timestamp, sizeof(novo.timestamp));
-    novo.valor = valor;
-    novo.idDispositivo = idDispositivo;
-
-    registros[totalRegistros++] = novo;
-}
-
 int compararCrescente(const void *a, const void *b) {
     return strcmp(((RegistroValor*)a)->timestamp, ((RegistroValor*)b)->timestamp);
 }
