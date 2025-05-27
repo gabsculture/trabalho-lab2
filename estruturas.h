@@ -1,5 +1,6 @@
 #ifndef ESTRUTURAS_H
 #define ESTRUTURAS_H
+#define MAX_VALORES 1000
 
 typedef struct Sensor {
     int id;
@@ -33,5 +34,14 @@ typedef struct Fila{
     int tamanho;
 } Fila;
 
+
+typedef struct {
+    char timestamp[20];
+    float valor;
+    int idDispositivo;
+} RegistroValor;
+
+extern RegistroValor registros[MAX_VALORES];
+extern int totalRegistros;
 
 #endif
