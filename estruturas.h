@@ -2,6 +2,17 @@
 #define ESTRUTURAS_H
 #define MAX_VALORES 1000
 
+
+
+typedef struct Valor {
+    char timestamp[20];
+    float valor;
+} Valor;
+
+
+extern Valor registros[MAX_VALORES];
+extern int totalRegistros;
+
 typedef struct Sensor {
     int id;
     char tipo[100];
@@ -35,12 +46,5 @@ typedef struct Fila{
 } Fila;
 
 
-typedef struct Valor {
-    char timestamp[20];
-    float valor;
-} Valor;
-
-extern RegistroValor registros[MAX_VALORES];
-extern int totalRegistros;
 
 #endif
