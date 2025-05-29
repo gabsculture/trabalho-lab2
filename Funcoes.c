@@ -413,7 +413,7 @@ void incluirTimeStamp(Sensor* sensor) {
         return;
     }
     pegaTempo(sensor->valor->timestamp, sizeof(sensor->valor->timestamp));
-    sensor->valor = valor;
+    sensor->valor->valor = valor;
     registros[totalRegistros++] = novo;
 }
 
