@@ -407,6 +407,23 @@ Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
     }
     return lista;
 }
+void incluirTimeStamp(Sensor* sensor) {
+    if (totalRegistros >= MAX_VALORES) {
+        printf("limite de registros atingido.\n");
+        return;
+    }
+    pegaTempo(sensor->valor->timestamp, sizeof(sensor->valor->timestamp));
+    sensor->valor = valor;
+    registros[totalRegistros++] = novo;
+}
+
+int compararCrescente(const void *a, const void *b) {
+    return strcmp(((Valor*)a)->timestamp, ((Valor*)b)->timestamp);
+}
+
+int compararDecrescente(const void *a, const void *b) {
+    return strcmp(((Valor*)b)->timestamp, ((Valor*)a)->timestamp);
+}
 
 Dispositivo *opera_sensores(Dispositivo *dispositivo){
     Dispositivo* lista = dispositivo;
@@ -560,7 +577,7 @@ void executa_evento(Fila* alta, Fila* media, Fila* baixa){
                 printf("Sensor nao encontrado!\n");
             }
             if(sensor != NULL){ //caso esse sensor exista ele troca o valor
-                sensor->valor->valor = evento->valor;
+                sensor->valor = evento->valor;
                 incluirTimeStamp(sensor);
             }
         }
