@@ -13,14 +13,22 @@ void pegaTempo(char *buffer, int tamanho) {
     strftime(buffer, tamanho, "%Y-%m-%d %H:%M:%S", tm_info);
 }
 
-void incluirTimeStamp(Sensor* sensor) {
-    if (totalRegistros >= MAX_VALORES) {
-        printf("limite de registros atingido.\n");
-        return;
+void incluirTimeStamp(Sensor* sensor, float valor) {
+    if (sensor->totalValores >= sensor->capacidade) {
+        int novaCapacidade = (sensor->capacidade == 0) ? 10 : sensor->capacidade * 2;
+        Valor* novosValores = realloc(sensor->valores, novaCapacidade * sizeof(Valor));
+        if (novosValores == NULL) {
+        printf("erro alocaçãomemória");
+            return;
+        }
+        sensor->valores = novosValores;
+        sensor->capacidade = novaCapacidade;
     }
-    pegaTempo(sensor->valor->timestamp, sizeof(sensor->valor->timestamp));
-    sensor->valor->valor = valor;
-    registros[totalRegistros++] = novo;
+
+    Valor novoValor;
+    pegaTempo(novoValor.timestamp, sizeof(novoValor.timestamp));
+    novoValor.valor = valor;
+    sensor->valores[sensor->totalValores++] = novoValor;
 }
 
 int compararCrescente(const void *a, const void *b) {
