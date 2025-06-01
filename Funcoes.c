@@ -18,7 +18,7 @@ void incluirTimeStamp(Sensor* sensor, float valor) {
         int novaCapacidade = (sensor->capacidade == 0) ? 10 : sensor->capacidade * 2;
         Valor* novosValores = realloc(sensor->valores, novaCapacidade * sizeof(Valor));
         if (novosValores == NULL) {
-        printf("erro alocaçãomemória");
+        printf("erro alocação de memória");
             return;
         }
         sensor->valores = novosValores;
@@ -39,23 +39,75 @@ int compararDecrescente(const void *a, const void *b) {
     return strcmp(((Valor*)b)->timestamp, ((Valor*)a)->timestamp);
 }
 
-bool verificacsv() { //função para verificar se existem timestamp iguais no arquivo
+bool verificacsv(Sensor* sensor) { //função para verificar se existem timestamp iguais no arquivo
+    FILE *arquivo = fopen(arquivoCsv, "r");
+
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo para leitura.");
+        return false;
+    }
+
+    char linha[200];
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        char timestampArquivo[20];
+        sscanf(linha, "%[^,],", timestampArquivo); // Lê o timestamp da linha
+
+        if (strcmp(sensor->valores->timestamp, timestampArquivo) == 0) {
+            fclose(arquivo);
+            return true; // Timestamp já existe
+        }
+    }
+
+    fclose(arquivo);
+    return false; // Timestamp não encontrado
 
 }
 
 void exportacsv(Sensor* sensor, Dispositivo* dispositivo, int contador) {
-    FILE *arquivo = fopen(arquivoCsv, "w");
+    FILE *arquivo = fopen(arquivoCsv, "a");
 
     if (arquivo == NULL) {
         printf("Erro na abertura do arquivo\n");
         exit(1);
     }
 
-    for (int i = 0; i < contador; i++) {//incluir a função verificacsv aqui
-        fprintf(arquivo, "%s, %d, %d, %.2f", sensor->valor->timestamp, dispositivo->id, sensor->id, sensor->valor->valor);
+    for (int i = 0; i < contador; i++) {
+        if (verificacsv(sensor) == false) {
+            printf("O Timestamp está %s duplicado", sensor->valores->timestamp);
+        }
+        fprintf(arquivo, "%s, %d, %d, %.2f", sensor->valores->timestamp, dispositivo->id, sensor->id, sensor->valores->valor);
     }
+
+    fclose(arquivo);
 }
 
 void importacsv(Sensor* sensor, Dispositivo* dispositivo) {
     FILE *arquivo = fopen(arquivoCsv, "r");
+
+    if (arquivo == NULL) {
+        printf("Erro na abertura do arquivo\n");
+        return;
+    }
+
+    char linha[200];
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        char timestamp[20];
+        int dispositivoId, sensorId;
+        float valor;
+
+        // Lê os valores do CSV (timestamp, dispositivoId, sensorId, valor)
+        sscanf(linha, "%[^,], %d, %d, %f", timestamp, &dispositivoId, &sensorId, &valor);
+
+        // Atualiza os dados nas estruturas Sensor e Dispositivo
+        dispositivo->id = dispositivoId;
+        sensor->id = sensorId;
+        strcpy(sensor->valores->timestamp, timestamp);
+        sensor->valores->valor = valor;
+
+        // Aqui você pode adicionar lógica para armazenar ou manipular os dados importados
+        printf("Importado: %s, %d, %d, %.2f\n", timestamp, dispositivoId, sensorId, valor);
+    }
+
+    fclose(arquivo); // Fecha o arquivo
+
 }

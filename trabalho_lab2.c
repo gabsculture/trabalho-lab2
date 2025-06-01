@@ -1,8 +1,9 @@
 // Diogo Dalbianco dos Santos e Gabriela Vitória da Rosa Soares 
 #include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include "Funcoes.c"
+#include "Dispositivos.c"
+#include "Sensores.c"
+#include "Evento.c"
+
 
 
 int main() {

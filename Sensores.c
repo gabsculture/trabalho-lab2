@@ -14,7 +14,7 @@ Sensor* criar_sensor(int id, char* tipo, char* subtipo, float valor) {
     novo->id = id;
     strcpy(novo->tipo, tipo);
     strcpy(novo->subtipo, subtipo);
-    novo->valor->valor = valor;
+    novo->valores->valor = valor;
     novo->proximo = NULL;
     return novo;
 }
@@ -58,7 +58,7 @@ void listar_sensores(Dispositivo* dispositivo) {
         return;
     }
     while (atual != NULL) {
-        printf("ID sensor: %d | tipo: %s | subtipo: %s |valor: %f |\n", atual->id, atual->tipo, atual->subtipo, atual->valor->valor);
+        printf("ID sensor: %d | tipo: %s | subtipo: %s |valor: %f |\n", atual->id, atual->tipo, atual->subtipo, atual->valores->valor);
         atual = atual->proximo;
     }
 }
