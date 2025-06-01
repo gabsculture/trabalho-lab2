@@ -1,23 +1,18 @@
 #ifndef ESTRUTURAS_H
 #define ESTRUTURAS_H
-#define MAX_VALORES 1000
-
-
 
 typedef struct Valor {
     char timestamp[20];
     float valor;
 } Valor;
 
-
-extern Valor registros[MAX_VALORES];
-extern int totalRegistros;
-
 typedef struct Sensor {
     int id;
     char tipo[100];
     char subtipo[100];
-    Valor* valor;
+    Valor* valores;
+    int totalValores; 
+    int capacidade;
     struct Sensor* proximo;
 } Sensor;
 
