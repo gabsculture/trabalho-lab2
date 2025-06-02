@@ -1,6 +1,6 @@
 #include "estruturas.h"
-#include "Dispositivos.c"
-#include "Funcoes.c"
+#include "Dispositivos.h"
+#include "Funcoes.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
