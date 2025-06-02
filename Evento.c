@@ -1,5 +1,5 @@
 #include "estruturas.h"
-#include "Funcoes.c"
+#include "Funcoes.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
