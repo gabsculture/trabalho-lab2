@@ -4,6 +4,8 @@
 typedef struct Valor {
     char timestamp[20];
     float valor;
+    struct Valor *proximo;
+    struct Valor *anterior;
 } Valor;
 
 typedef struct Sensor {

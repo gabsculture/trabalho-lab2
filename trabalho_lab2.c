@@ -29,6 +29,7 @@ int main() {
                 opera_evento(lista, alta, media, baixa); //faz as operações com os eventos
                 break;
             case 4:
+                printf("Escolha entre crescente e descresente");//TODO Alterar as ordem execução
                 printf("finalizado\n");
                 break;
             default:

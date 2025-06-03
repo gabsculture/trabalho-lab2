@@ -1,3 +1,5 @@
+#include "Funcoes.h"
+
 #include "estruturas.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,13 +9,30 @@
 
 FILE *arquivoCsv;
 
-void pegaTempo(char *buffer, int tamanho) {
+Valor* cria_listavazia() {
+    return NULL;
+}
+
+Valor* insere_valor(Valor *lst_valor, float valor) { //TODO terminar isso aqui
+    Valor *novo = (Valor*)malloc(sizeof(Valor));
+
+    novo->valor = valor;
+    novo->timestamp = pegaTempo();
+    novo->proximo = lst_valor;
+    novo->anterior = NULL;
+
+    if (lst_valor != NULL) {
+        lst_valor->anterior = novo;
+    }
+}
+
+void pegaTempo(char *buffer, int tamanho) { //TODO revizar isso aqui
     time_t agora = time(NULL);
     struct tm *tm_info = localtime(&agora);
     strftime(buffer, tamanho, "%Y-%m-%d %H:%M:%S", tm_info);
 }
 
-void incluirTimeStamp(Sensor* sensor, float valor) {
+void incluirTimeStamp(Sensor* sensor, float valor) { //TODO revizar isso aqui
     if (sensor->totalValores >= sensor->capacidade) {
         int novaCapacidade = (sensor->capacidade == 0) ? 10 : sensor->capacidade * 2;
         Valor* novosValores = realloc(sensor->valores, novaCapacidade * sizeof(Valor));
@@ -31,10 +50,11 @@ void incluirTimeStamp(Sensor* sensor, float valor) {
     sensor->valores[sensor->totalValores++] = novoValor;
 }
 
+//TODO revizar isso aqui
 int compararCrescente(const void *a, const void *b) {
     return strcmp(((Valor*)a)->timestamp, ((Valor*)b)->timestamp);
 }
-
+//TODO revizar isso aqui
 int compararDecrescente(const void *a, const void *b) {
     return strcmp(((Valor*)b)->timestamp, ((Valor*)a)->timestamp);
 }

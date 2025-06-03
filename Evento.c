@@ -165,6 +165,7 @@ void executa_evento(Fila* alta, Fila* media, Fila* baixa){
                 printf("Sensor nao encontrado!\n");
             }
             if(sensor != NULL){ //caso esse sensor exista ele troca o valor
+                //TODO arrumar para colocar a função insere_valor
                 sensor->valores->valor = evento->valor;
                 incluirTimeStamp(sensor, evento->valor);
             }

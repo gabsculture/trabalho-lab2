@@ -14,7 +14,7 @@ Sensor* criar_sensor(int id, char* tipo, char* subtipo, float valor) {
     novo->id = id;
     strcpy(novo->tipo, tipo);
     strcpy(novo->subtipo, subtipo);
-    novo->valores->valor = valor;
+    novo->valores->valor = valor; //TODO incluir o insere na lista e o timestamp
     novo->proximo = NULL;
     return novo;
 }
