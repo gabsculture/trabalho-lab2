@@ -13,17 +13,23 @@ Valor* cria_listavazia() {
     return NULL;
 }
 
-Valor* insere_valor(Valor *lst_valor, float valor) { //TODO terminar isso aqui
+Valor* insere_valor(Valor *listaValor, float valor) {
     Valor *novo = (Valor*)malloc(sizeof(Valor));
 
+    if (novo == NULL) {
+        printf("Erro de alocação de memória.\n");
+        return listaValor;
+    }
+
     novo->valor = valor;
-    novo->timestamp = pegaTempo();
-    novo->proximo = lst_valor;
+    pegaTempo(novo->timestamp, sizeof(novo->timestamp));
+    novo->proximo = listaValor;
     novo->anterior = NULL;
 
-    if (lst_valor != NULL) {
-        lst_valor->anterior = novo;
+    if (listaValor != NULL) {
+        listaValor->anterior = novo;
     }
+    return novo;  // novo passa a ser a nova cabeça da lista
 }
 
 void pegaTempo(char *buffer, int tamanho) { //TODO revizar isso aqui
