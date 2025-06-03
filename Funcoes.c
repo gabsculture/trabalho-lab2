@@ -1,5 +1,4 @@
 #include "Funcoes.h"
-
 #include "estruturas.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,6 +27,93 @@ Valor* insere_valor(Valor *listaValor, float valor) { //insere o valor do sensor
     return novo;  // novo passa a ser a nova cabeça da lista
 }
 
+Sensor* encontrarSensor(Sensor *listaSensores, int id) {
+    Sensor *atual = listaSensores;
+    while (atual != NULL) {
+        if (atual->id == id) {
+            return atual;
+        }
+        atual = atual->proximo;
+    }
+    return NULL;
+}
+
+void printa_lista_crescente(int id) {
+    extern Sensor *listaSensores;
+
+    Sensor *sensor = encontrarSensor(listaSensores, id);
+    if (sensor == NULL) {
+        printf("Sensor com ID %d não encontrado!\n", id);
+        return;
+    }
+
+    Valor *atual = sensor->valores;
+    if (atual == NULL) {
+        printf("Nenhum valor registrado para o sensor %d\n", id);
+        return;
+    }
+
+    // Encontrar o início da lista (caso não esteja no primeiro nó)
+    while (atual->anterior != NULL) {
+        atual = atual->anterior;
+    }
+
+    printf("\nValores do sensor %d em ordem crescente:\n", id);
+    while (atual != NULL) {
+        printf("Timestamp: %s, Valor: %.2f\n", atual->timestamp, atual->valor);
+        atual = atual->proximo;
+    }
+}
+
+void printa_lista_decrescente(int id) {
+    extern Sensor *listaSensores;
+
+    Sensor *sensor = encontrarSensor(listaSensores, id);
+    if (sensor == NULL) {
+        printf("Sensor com ID %d não encontrado!\n", id);
+        return;
+    }
+
+    Valor *atual = sensor->valores;
+    if (atual == NULL) {
+        printf("Nenhum valor registrado para o sensor %d\n", id);
+        return;
+    }
+
+    // Encontrar o fim da lista
+    while (atual->proximo != NULL) {
+        atual = atual->proximo;
+    }
+
+    printf("\nValores do sensor %d em ordem decrescente:\n", id);
+    while (atual != NULL) {
+        printf("Timestamp: %s, Valor: %.2f\n", atual->timestamp, atual->valor);
+        atual = atual->anterior;
+    }
+}
+
+void ordem_da_lista() {
+    int valor, id;
+    do {
+        printf("\nEm qual ordem deseja os valores?\n1 - Crescente\n2 - Descresente");
+        scanf("%d", &valor);
+        switch (valor) {
+            case 1:
+                printf("Digite o id do sensor que deseja ver a lista de valores: ");
+                scanf("%d", &id);
+                printa_lista_crescente(id);
+                break;
+            case 2:
+                printf("Digite o id do sensor que deseja ver a lista de valores: ");
+                scanf("%d", &id);
+                printa_lista_decrescente(id);
+                break;
+            default:
+                printf("Esse ordem não existe");
+        }
+    }while (valor != 1 && valor != 2);
+}
+
 void pegaTempo(char *buffer, int tamanho) {
     time_t agora = time(NULL);
     struct tm *tm_info = localtime(&agora);
@@ -38,15 +124,6 @@ void incluirTimeStamp(Sensor* sensor, float valor) {
     sensor->valores = insere_valor(sensor->valores, valor);
 }
 
-
-//TODO revizar isso aqui
-int compararCrescente(const void *a, const void *b) {
-    return strcmp(((Valor*)a)->timestamp, ((Valor*)b)->timestamp);
-}
-//TODO revizar isso aqui
-int compararDecrescente(const void *a, const void *b) {
-    return strcmp(((Valor*)b)->timestamp, ((Valor*)a)->timestamp);
-}
 
 bool verificacsv(Sensor* sensor) { //função para verificar se existem timestamp iguais no arquivo
     FILE *arquivo = fopen(arquivoCsv, "r");

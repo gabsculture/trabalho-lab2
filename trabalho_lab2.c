@@ -3,6 +3,7 @@
 #include "Dispositivos.h"
 #include "Sensores.h"
 #include "Evento.h"
+#include "Funcoes.h"
 
 
 
@@ -16,7 +17,7 @@ int main() {
 
 
     do {
-        printf("\nCom o que deseja mexer: \n1 - Dispositivos\n2 - Sensores\n3 - Eventos\n4 - Sair\n\nEscolha uma opção:");
+        printf("\nCom o que deseja mexer: \n1 - Dispositivos\n2 - Sensores\n3 - Eventos\n4 - Lista de valores de um sensor/atuador \n5 - Sair\n\nEscolha uma opção:");
         scanf("%d", &opicao);
 
         switch (opicao) {
@@ -30,13 +31,15 @@ int main() {
                 opera_evento(lista, alta, media, baixa); //faz as operações com os eventos
                 break;
             case 4:
-                printf("Escolha entre crescente e descresente");//TODO Alterar as ordem execução
+                ordem_da_lista();
+                break;
+            case 5:
                 printf("finalizado\n");
                 break;
             default:
                 printf("opição invalida!\n");
         }
-    } while (opicao != 4);
+    } while (opicao != 5);
 
     //libera as listas e as filas
     libera(lista);

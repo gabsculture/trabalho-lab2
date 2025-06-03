@@ -8,6 +8,10 @@
 extern FILE *arquivoCsv;
 
 Valor* insere_valor(Valor *listaValor, float valor);
+Sensor* encontrarSensor(Sensor *listaSensores, int id);
+void printa_lista_crescente(int id);
+void printa_lista_decrescente(int id);
+void ordem_da_lista();
 
 void minusculas(char* str);  
 void pegaTempo(char *buffer, int tamanho);

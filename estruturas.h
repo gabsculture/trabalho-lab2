@@ -8,6 +8,11 @@ typedef struct Valor {
     struct Valor *anterior;
 } Valor;
 
+typedef struct Lista {
+    Valor *inicio;
+    Valor *fim;
+} Lista;
+
 typedef struct Sensor {
     int id;
     char tipo[100];
