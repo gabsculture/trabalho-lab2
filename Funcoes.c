@@ -9,11 +9,7 @@
 
 FILE *arquivoCsv;
 
-Valor* cria_listavazia() {
-    return NULL;
-}
-
-Valor* insere_valor(Valor *listaValor, float valor) {
+Valor* insere_valor(Valor *listaValor, float valor) { //insere o valor do sensor/atuador e insere o timestamp
     Valor *novo = (Valor*)malloc(sizeof(Valor));
 
     if (novo == NULL) {
@@ -32,7 +28,7 @@ Valor* insere_valor(Valor *listaValor, float valor) {
     return novo;  // novo passa a ser a nova cabeça da lista
 }
 
-void pegaTempo(char *buffer, int tamanho) { //TODO revizar isso aqui
+void pegaTempo(char *buffer, int tamanho) {
     time_t agora = time(NULL);
     struct tm *tm_info = localtime(&agora);
     strftime(buffer, tamanho, "%Y-%m-%d %H:%M:%S", tm_info);

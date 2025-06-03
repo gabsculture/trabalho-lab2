@@ -11,6 +11,7 @@ int main() {
     Fila *alta = cria();
     Fila *media = cria();
     Fila *baixa = cria();
+
     int opicao;
 
 

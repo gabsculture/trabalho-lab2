@@ -7,6 +7,8 @@
 
 extern FILE *arquivoCsv;
 
+Valor* insere_valor(Valor *listaValor, float valor);
+
 void minusculas(char* str);  
 void pegaTempo(char *buffer, int tamanho);
 void incluirTimeStamp(Sensor* sensor, float valor);
