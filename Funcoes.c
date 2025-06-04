@@ -1,5 +1,6 @@
 #include "Funcoes.h"
 #include "estruturas.h"
+#include "Sensores.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -126,7 +127,7 @@ void incluirTimeStamp(Sensor* sensor, float valor) {
 
 
 bool verificacsv(Sensor* sensor) { //função para verificar se existem timestamp iguais no arquivo
-    FILE *arquivo = fopen(arquivoCsv, "r");
+    FILE *arquivo = fopen("arquivoCsv.csv", "r");
 
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo para leitura.");
@@ -150,7 +151,7 @@ bool verificacsv(Sensor* sensor) { //função para verificar se existem timestam
 }
 
 void exportacsv(Sensor* sensor, Dispositivo* dispositivo, int contador) {
-    FILE *arquivo = fopen(arquivoCsv, "a");
+    FILE *arquivo = fopen("arquivoCsv.csv", "a");
 
     if (arquivo == NULL) {
         printf("Erro na abertura do arquivo\n");
@@ -168,7 +169,7 @@ void exportacsv(Sensor* sensor, Dispositivo* dispositivo, int contador) {
 }
 
 void importacsv(Sensor* sensor, Dispositivo* dispositivo) {
-    FILE *arquivo = fopen(arquivoCsv, "r");
+    FILE *arquivo = fopen("arquivoCsv", "r");
 
     if (arquivo == NULL) {
         printf("Erro na abertura do arquivo\n");

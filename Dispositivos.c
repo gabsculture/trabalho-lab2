@@ -200,27 +200,27 @@ Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
                 verifica = valida_id(lista, id);
             }while(verifica != true);
 
-        printf("descricao: ");
-        scanf(" %99[^\n]",descricao);
+            printf("descricao: ");
+            scanf(" %99[^\n]",descricao);
 
-        //le a entrtada do usuario e verifica se o dispositivo é valido
-        confere_dispositivos(tipo);
+            //le a entrtada do usuario e verifica se o dispositivo é valido
+            confere_dispositivos(tipo);
 
-        //le a entrtada do usuario e verifica se a condição é valida
-        condicoes_validas(status);
+            //le a entrtada do usuario e verifica se a condição é valida
+            condicoes_validas(status);
 
-        insere_dispositivo(&lista, criar_dispositivo(id, descricao, tipo, status));
-        break;
+            insere_dispositivo(&lista, criar_dispositivo(id, descricao, tipo, status));
+            break;
         case 2:
             printf("ID do dispositivo q deseja remover: "); scanf("%d", &id);
-        remove_dispositivo(&lista, id);
-        break;
+            remove_dispositivo(&lista, id);
+            break;
         case 3:
             busca(lista);
-        break;
+            break;
         case 4:
             listar_dispositivos(lista);
-        break;
+            break;
         default:
             printf("opicao invalida!\n");
     }

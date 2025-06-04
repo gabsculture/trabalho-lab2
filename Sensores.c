@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+Sensor* listaSensores = NULL;
+
 Sensor* criar_sensor(int id, char* tipo, char* subtipo, float valor) {
     Sensor* novo = (Sensor*)malloc(sizeof(Sensor));
     if (novo == NULL) {

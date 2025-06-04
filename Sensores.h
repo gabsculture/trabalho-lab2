@@ -3,6 +3,8 @@
 
 #include "estruturas.h"
 
+extern Sensor* listaSensores;
+
 Sensor* criar_sensor(int id, char* tipo, char* subtipo, float valor);
 void insere_sensor(Dispositivo* dispositivo, Sensor* novo);
 void remove_sensor(Dispositivo* dispositivo, int id);

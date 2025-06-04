@@ -2,6 +2,7 @@
 #define FUNCOES_H
 
 #include "estruturas.h"
+#include <stdio.h>
 #include <stdbool.h>
 
 
