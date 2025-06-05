@@ -267,4 +267,4 @@ void liberar_todas_filas(Fila* alta, Fila* media, Fila* baixa){
     if (baixa != NULL) {
         liberar_fila(baixa);
     }
-}
+}  
