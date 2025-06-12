@@ -39,18 +39,18 @@ Sensor* encontrarSensor(Sensor *listaSensores, int id) {
     return NULL;
 }
 
-void printa_lista_crescente(int id) {
+void printa_lista_crescente(int id_dispositivo, int id_sensor) {
     extern Sensor *listaSensores;
 
-    Sensor *sensor = encontrarSensor(listaSensores, id);
+    Sensor *sensor = encontrarSensor(listaSensores, id_sensor);
     if (sensor == NULL) {
-        printf("Sensor com ID %d não encontrado!\n", id);
+        printf("Sensor com ID %d não encontrado!\n", id_sensor);
         return;
     }
 
     Valor *atual = sensor->valores;
     if (atual == NULL) {
-        printf("Nenhum valor registrado para o sensor %d\n", id);
+        printf("Nenhum valor registrado para o sensor %d\   n", id_sensor);
         return;
     }
 
@@ -59,25 +59,25 @@ void printa_lista_crescente(int id) {
         atual = atual->anterior;
     }
 
-    printf("\nValores do sensor %d em ordem crescente:\n", id);
+    printf("\nValores do sensor %d em ordem crescente:\n", id_sensor);
     while (atual != NULL) {
         printf("Timestamp: %s, Valor: %.2f\n", atual->timestamp, atual->valor);
         atual = atual->proximo;
     }
 }
 
-void printa_lista_decrescente(int id) {
+void printa_lista_decrescente(int id_dispositivo, int id_sensor) {
     extern Sensor *listaSensores;
 
-    Sensor *sensor = encontrarSensor(listaSensores, id);
+    Sensor *sensor = encontrarSensor(listaSensores, id_sensor);
     if (sensor == NULL) {
-        printf("Sensor com ID %d não encontrado!\n", id);
+        printf("Sensor com ID %d não encontrado!\n", id_sensor);
         return;
     }
 
     Valor *atual = sensor->valores;
     if (atual == NULL) {
-        printf("Nenhum valor registrado para o sensor %d\n", id);
+        printf("Nenhum valor registrado para o sensor %d\n", id_sensor);
         return;
     }
 
@@ -86,7 +86,7 @@ void printa_lista_decrescente(int id) {
         atual = atual->proximo;
     }
 
-    printf("\nValores do sensor %d em ordem decrescente:\n", id);
+    printf("\nValores do sensor %d em ordem decrescente:\n", id_sensor);
     while (atual != NULL) {
         printf("Timestamp: %s, Valor: %.2f\n", atual->timestamp, atual->valor);
         atual = atual->anterior;
@@ -94,20 +94,24 @@ void printa_lista_decrescente(int id) {
 }
 
 void ordem_da_lista() {
-    int valor, id;
+    int valor, id_sensor, id_dispositivo;
     do {
         printf("\nEm qual ordem deseja os valores?\n1 - Crescente\n2 - Descresente");
         scanf("%d", &valor);
         switch (valor) {
             case 1:
+                printf("Digite o id do dispositivo: ");
+                scanf("%d", &id_dispositivo);
                 printf("Digite o id do sensor que deseja ver a lista de valores: ");
-                scanf("%d", &id);
-                printa_lista_crescente(id);
+                scanf("%d", &id_sensor);
+                printa_lista_crescente(id_dispositivo, id_sensor);
                 break;
             case 2:
+                printf("Digite o id do dispositivo: ");
+                scanf("%d", &id_dispositivo);
                 printf("Digite o id do sensor que deseja ver a lista de valores: ");
-                scanf("%d", &id);
-                printa_lista_decrescente(id);
+                scanf("%d", &id_sensor);
+                printa_lista_decrescente(id_dispositivo, id_sensor);
                 break;
             default:
                 printf("Esse ordem não existe");

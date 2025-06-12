@@ -121,10 +121,21 @@ void subtipo_validos(char* subtipo_sensor) {
     }while(valido != 1);
 }
 
+int id_validos(Dispositivo* dispositivo, int id_sensor) {
+    while(dispositivo != NULL) {
+        if(dispositivo->sensores->id == id_sensor) {
+            return 0;
+        }
+
+        dispositivo = dispositivo->proximo;
+    }
+    return 1;
+}
+
 Dispositivo *opera_sensores(Dispositivo *dispositivo){
     Dispositivo* lista = dispositivo;
     char tipo_sensor[100], subtipo_sensor[100];
-    int op ,id;
+    int op ,id, valida;
     float valor;
 
     printf("\n1 - Adicionar sensor a um dispositivo\n2 - Remover um sensor\n3 - Listar sensores de um dispositivo");
@@ -140,7 +151,12 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
                 printf("dispositivo nao encontrado!\n");
                 break;
             }
-            printf("ID do sensor: "); scanf("%d", &id);
+            do {
+                printf("ID do sensor: ");
+                scanf("%d", &id);
+                valida = id_validos(dispositivo, id);
+            }while(valida != 1);
+
 
             tipo_validos(tipo_sensor);
             //le a entrtada do usuario e verifica se o subtipo do sensor é valido
