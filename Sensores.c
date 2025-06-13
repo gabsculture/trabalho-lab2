@@ -16,9 +16,21 @@ Sensor* criar_sensor(int id, char* tipo, char* subtipo, float valor) {
     novo->id = id;
     strcpy(novo->tipo, tipo);
     strcpy(novo->subtipo, subtipo);
+    novo->valores = NULL;
     novo->valores= insere_valor(novo->valores, valor);
     novo->proximo = NULL;
     return novo;
+}
+
+int id_validos(Dispositivo* dispositivo, int id_sensor) {
+    while(dispositivo != NULL) {
+        if(dispositivo->sensores->id == id_sensor) {
+            return 0;
+        }
+
+        dispositivo = dispositivo->proximo;
+    }
+    return 1;
 }
 
 void insere_sensor(Dispositivo* dispositivo, Sensor* novo) {
@@ -121,17 +133,6 @@ void subtipo_validos(char* subtipo_sensor) {
     }while(valido != 1);
 }
 
-int id_validos(Dispositivo* dispositivo, int id_sensor) {
-    while(dispositivo != NULL) {
-        if(dispositivo->sensores->id == id_sensor) {
-            return 0;
-        }
-
-        dispositivo = dispositivo->proximo;
-    }
-    return 1;
-}
-
 Dispositivo *opera_sensores(Dispositivo *dispositivo){
     Dispositivo* lista = dispositivo;
     char tipo_sensor[100], subtipo_sensor[100];
@@ -151,12 +152,12 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
                 printf("dispositivo nao encontrado!\n");
                 break;
             }
+            printf("ID do sensor: "); scanf("%d", &id);
             do {
                 printf("ID do sensor: ");
                 scanf("%d", &id);
                 valida = id_validos(dispositivo, id);
             }while(valida != 1);
-
 
             tipo_validos(tipo_sensor);
             //le a entrtada do usuario e verifica se o subtipo do sensor é valido
@@ -164,6 +165,7 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
 
             if(strcmp(tipo_sensor, "sensor") == 0) {
                 printf("\nDigite o valor do sensor\n");
+                
                 scanf("%f", &valor);
             }else{
                 valor = 0;
@@ -194,4 +196,3 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
 
     return dispositivo;
 }
-
