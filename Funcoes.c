@@ -1,6 +1,7 @@
 #include "Funcoes.h"
 #include "estruturas.h"
 #include "Sensores.h"
+#include "Dispositivos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,11 +29,15 @@ Valor* insere_valor(Valor *listaValor, float valor) { //insere o valor do sensor
     return novo;  // novo passa a ser a nova cabeça da lista
 }
 
-Sensor* encontrarSensor(Sensor *listaSensores, int id) {
-    Sensor *atual = listaSensores;
+Dispositivo* encontrarSensor(Dispositivo *listaDispositivos, int id_dispositivo, int id_sensor) {
+    Dispositivo *atual = listaDispositivos;
     while (atual != NULL) {
-        if (atual->id == id) {
-            return atual;
+        if (atual->id == id_dispositivo){
+            while (atual->sensores != NULL) {
+                if (atual->sensores->id == id_sensor) {
+                    return atual;
+                }
+            }
         }
         atual = atual->proximo;
     }
@@ -40,13 +45,15 @@ Sensor* encontrarSensor(Sensor *listaSensores, int id) {
 }
 
 void printa_lista_crescente(int id_dispositivo, int id_sensor) {
-    Sensor *sensor = encontrarSensor(listaSensores, id_sensor);
-    if (sensor == NULL) {
+    extern Dispositivo *listaDispositivos;
+
+    Dispositivo *dispositivo = encontrarSensor(listaDispositivos, id_dispositivo, id_sensor);
+    if (dispositivo == NULL) {
         printf("Sensor com ID %d não encontrado!\n", id_sensor);
         return;
     }
 
-    Valor *atual = sensor->valores;
+    Valor *atual = dispositivo->sensores->valores;
     if (atual == NULL) {
         printf("Nenhum valor registrado para o sensor %d\n", id_sensor);
         return;
@@ -65,15 +72,15 @@ void printa_lista_crescente(int id_dispositivo, int id_sensor) {
 }
 
 void printa_lista_decrescente(int id_dispositivo, int id_sensor) {
-    extern Sensor *listaSensores;
+    extern Dispositivo *listaDispositivos;
 
-    Sensor *sensor = encontrarSensor(listaSensores, id_sensor);
-    if (sensor == NULL) {
+    Dispositivo *dispositivo = encontrarSensor(listaDispositivos, id_dispositivo, id_sensor);
+    if (dispositivo == NULL) {
         printf("Sensor com ID %d não encontrado!\n", id_sensor);
         return;
     }
 
-    Valor *atual = sensor->valores;
+    Valor *atual = dispositivo->sensores->valores;
     if (atual == NULL) {
         printf("Nenhum valor registrado para o sensor %d\n", id_sensor);
         return;
@@ -84,7 +91,7 @@ void printa_lista_decrescente(int id_dispositivo, int id_sensor) {
         atual = atual->proximo;
     }
 
-    printf("\nValores do sensor %d em ordem decrescente:\n", id);
+    printf("\nValores do sensor %d em ordem decrescente:\n", id_sensor);
     while (atual != NULL) {
         printf("Timestamp: %s, Valor: %.2f\n", atual->timestamp, atual->valor);
         atual = atual->anterior;
