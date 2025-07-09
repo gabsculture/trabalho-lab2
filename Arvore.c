@@ -18,3 +18,9 @@ NoArvore* plantar_arvore(Valor** vetor, int inicio, int fim) {
 
     return no;
 }
+void desmatar_arvore(NoArvore* raiz) {
+    if (raiz == NULL) return;
+    desmatar_arvore(raiz->esquerda);
+    desmatar_arvore(raiz->direita);
+    free(raiz);
+}
