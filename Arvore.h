@@ -7,5 +7,6 @@ NoArvore* plantar_arvore(Valor** vetor, int inicio, int fim);
 void desmatar_arvore(NoArvore* raiz);
 int contar_valores(Valor* lista);
 void lista_para_vetor(Valor* lista, Valor** vetor);
+void mostrar_arvore(NoArvore* raiz);
 
 #endif
