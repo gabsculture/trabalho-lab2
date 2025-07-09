@@ -42,3 +42,10 @@ void lista_para_vetor(Valor* lista, Valor** vetor) {
         lista = lista->proximo;
     }
 }
+
+void mostrar_arvore(NoArvore* raiz) {
+    if (raiz == NULL) return;
+    mostrar_arvore(raiz->esquerda);
+    printf("Timestamp: %s | Valor: %.2f\n", raiz->timestamp, raiz->valor);
+    mostrar_arvore(raiz->direita);
+}
