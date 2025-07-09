@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <time.h>
 
 NoArvore* plantar_arvore(Valor** vetor, int inicio, int fim) {
     if (inicio > fim) return NULL;
@@ -49,3 +50,33 @@ void mostrar_arvore(NoArvore* raiz) {
     printf("Timestamp: %s | Valor: %.2f\n", raiz->timestamp, raiz->valor);
     mostrar_arvore(raiz->direita);
 }
+
+float buscar_timestamp_arvore(NoArvore* raiz, char* timestamp) {
+    clock_t inicio = clock();  // começa a medir o tempo
+
+    NoArvore* atual = raiz;
+    while (atual != NULL) {
+        int cmp = strcmp(timestamp, atual->timestamp);
+        if (cmp == 0) {
+            clock_t fim = clock();  // fim da medição
+            double tempo_ms = ((double)(fim - inicio) * 1000) / CLOCKS_PER_SEC;
+            printf("Valor encontrado: %.2f\n", atual->valor);
+            printf("Timestamp: %s\n", atual->timestamp);
+            printf("Tempo de busca: %.4f ms\n", tempo_ms);
+            return atual->valor;
+        } else if (cmp < 0) {
+            atual = atual->esquerda;
+        } else {
+            atual = atual->direita;
+        }
+    }
+
+    clock_t fim = clock();  // fim mesmo se não encontrar
+    double tempo_ms = ((double)(fim - inicio) * 1000) / CLOCKS_PER_SEC;
+
+    printf("Timestamp não encontrado!\n");
+    printf("Tempo de busca: %.4f ms\n", tempo_ms);
+    return -1.0;
+}
+
+
