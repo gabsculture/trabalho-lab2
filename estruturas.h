@@ -1,6 +1,13 @@
 #ifndef ESTRUTURAS_H
 #define ESTRUTURAS_H
 
+typedef struct NoArvore {
+    char timestamp[20];
+    float valor;         
+    struct NoArvore *esquerda;
+    struct NoArvore *direita;
+} NoArvore;
+
 typedef struct Valor {
     char timestamp[20];
     float valor;
