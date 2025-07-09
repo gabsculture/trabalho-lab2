@@ -4,5 +4,5 @@
 #include <stdbool.h>
 
 NoArvore* plantar_arvore(Valor** vetor, int inicio, int fim);
-
+void desmatar_arvore(NoArvore* raiz);
 #endif
