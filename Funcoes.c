@@ -20,23 +20,34 @@ Valor* insere_valor(Valor *listaValor, float valor) { //insere o valor do sensor
 
     novo->valor = valor;
     pegaTempo(novo->timestamp, sizeof(novo->timestamp));
-    novo->proximo = listaValor;
+    novo->proximo = NULL;
     novo->anterior = NULL;
 
     if (listaValor != NULL) {
         listaValor->anterior = novo;
+            return novo;  // novo passa a ser a nova cabeça da lista
     }
-    return novo;  // novo passa a ser a nova cabeça da lista
+    Valor *atual = listaValor;
+    while (atual->proximo != NULL) {
+        atual = atual->proximo;
+    }
+
+    atual->proximo = novo;
+    novo->anterior = atual;
+
+    return listaValor;
 }
 
 Dispositivo* encontrarSensor(Dispositivo* lista, int id_dispositivo, int id_sensor) {
     Dispositivo *atual = lista;
     while (atual != NULL) {
         if (atual->id == id_dispositivo){
-            while (atual->sensores != NULL) {
-                if (atual->sensores->id == id_sensor) {
+            Sensor* sensorAtual = atual->sensores;
+            while (sensorAtual != NULL) {
+                if (sensorAtual->id == id_sensor) {
                     return atual;
                 }
+                sensorAtual = sensorAtual->proximo;
             }
         }
         atual = atual->proximo;
