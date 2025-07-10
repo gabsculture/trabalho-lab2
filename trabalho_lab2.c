@@ -1,4 +1,3 @@
-// Diogo Dalbianco dos Santos e Gabriela Vitória da Rosa Soares 
 #include <stdio.h>
 #include "Dispositivos.h"
 #include "Sensores.h"
