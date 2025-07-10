@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 Sensor* listaSensores = NULL;
 
@@ -22,15 +23,15 @@ Sensor* criar_sensor(int id, char* tipo, char* subtipo, float valor) {
     return novo;
 }
 
-int id_validos(Dispositivo* dispositivo, int id_sensor) {
-    while(dispositivo != NULL) {
+bool verifica_id(Dispositivo* dispositivo, int id_sensor) {
+    while(dispositivo != NULL && dispositivo->sensores != NULL) {
         if(dispositivo->sensores->id == id_sensor) {
-            return 0;
+            return false;
         }
 
         dispositivo = dispositivo->proximo;
     }
-    return 1;
+    return true;
 }
 
 void insere_sensor(Dispositivo* dispositivo, Sensor* novo) {
@@ -135,7 +136,8 @@ void subtipo_validos(char* subtipo_sensor) {
 
 Dispositivo *opera_sensores(Dispositivo *dispositivo){
     char tipo_sensor[100], subtipo_sensor[100];
-    int op ,id, valida;
+    int op ,idDispositivo, idSensor;
+    bool verifica;
     float valor;
 
     printf("\n1 - Adicionar sensor a um dispositivo\n2 - Remover um sensor\n3 - Listar sensores de um dispositivo");
@@ -143,20 +145,20 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
 
     switch(op) {
         case 1:
-            printf("ID do dispositivo q deseja adicionar sensor: "); scanf("%d", &id);
-            while (dispositivo != NULL && dispositivo->id != id) {
+            printf("ID do dispositivo q deseja adicionar sensor: ");
+            scanf("%d", &idDispositivo);
+            while (dispositivo != NULL && dispositivo->id != idDispositivo) {
                 dispositivo = dispositivo->proximo;
             }
             if (dispositivo == NULL) {
                 printf("dispositivo nao encontrado!\n");
                 break;
             }
-            printf("ID do sensor: "); scanf("%d", &id);
             do {
                 printf("ID do sensor: ");
-                scanf("%d", &id);
-                valida = id_validos(dispositivo, id);
-            }while(valida != 1);
+                scanf("%d", &idSensor);
+                verifica = verifica_id(dispositivo, idSensor);
+            } while(verifica != true);
 
             tipo_validos(tipo_sensor);
             //le a entrtada do usuario e verifica se o subtipo do sensor é valido
@@ -164,23 +166,21 @@ Dispositivo *opera_sensores(Dispositivo *dispositivo){
 
             if(strcmp(tipo_sensor, "sensor") == 0) {
                 printf("\nDigite o valor do sensor\n");
-                
+
                 scanf("%f", &valor);
             }else{
                 valor = 0;
             }
-
-            insere_sensor(dispositivo, criar_sensor(id, tipo_sensor,subtipo_sensor, valor));
+            insere_sensor(dispositivo, criar_sensor(idSensor, tipo_sensor,subtipo_sensor, valor));
             break;
         case 2:
-            printf("ID do dispositivo q deseja adicionar sensor: ");
-            scanf("%d", &id);
-
-            remove_sensor(dispositivo, id);
+            printf("ID do dispositivo q deseja remover sensor: ");
+            scanf("%d", &idSensor);
+            remove_sensor(dispositivo, idSensor);
             break;
         case 3:
-            printf("ID do dispositivo q deseja ver os sensores: "); scanf("%d", &id);
-            while (dispositivo != NULL && dispositivo->id != id) {
+            printf("ID do dispositivo q deseja ver os sensores: "); scanf("%d", &idDispositivo);
+            while (dispositivo != NULL && dispositivo->id != idDispositivo) {
                 dispositivo = dispositivo->proximo;
             }
             if (dispositivo == NULL) {
