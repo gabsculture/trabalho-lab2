@@ -134,7 +134,6 @@ void subtipo_validos(char* subtipo_sensor) {
 }
 
 Dispositivo *opera_sensores(Dispositivo *dispositivo){
-    Dispositivo* lista = dispositivo;
     char tipo_sensor[100], subtipo_sensor[100];
     int op ,id, valida;
     float valor;
