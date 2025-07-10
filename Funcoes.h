@@ -9,9 +9,9 @@
 extern FILE *arquivoCsv;
 
 Valor* insere_valor(Valor *listaValor, float valor);
-Sensor* encontrarSensor(Sensor *listaSensores, int id);
-void printa_lista_crescente(int id);
-void printa_lista_decrescente(int id);
+Dispositivo* encontrarSensor(Dispositivo *listaDispositivos, int id_dispositivo, int id_sensor);
+void printa_lista_crescente(int id_dispositivo, int id_sensor);
+void printa_lista_decrescente(int id_dispositivo, int id_sensor);
 void ordem_da_lista();
 
 void minusculas(char* str);  
@@ -21,8 +21,8 @@ void incluirTimeStamp(Sensor* sensor, float valor);
 int compararCrescente(const void *a, const void *b);
 int compararDecrescente(const void *a, const void *b);
 
-bool verificacsv(Sensor* sensor);
-void exportacsv(Sensor* sensor, Dispositivo* dispositivo, int contador);
+bool verificacsv(char *timestamp);
+void exportacsv(Sensor* sensor, Dispositivo* dispositivo);
 void importacsv(Sensor* sensor, Dispositivo* dispositivo);
 
 #endif

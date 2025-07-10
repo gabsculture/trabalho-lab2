@@ -6,16 +6,23 @@
 #include <ctype.h>
 #include <time.h>
 
-NoArvore* plantar_arvore(Valor** vetor, int inicio, int fim) {
+
+
+
+NoArvore* plantar_arvore(Dispositivo* lista, int inicio, int fim) {
+    Valor* valor = lista->sensores->valores;
     if (inicio > fim) return NULL;
 
     int meio = (inicio + fim) / 2;
 
     NoArvore* no = malloc(sizeof(NoArvore));
-    strcpy(no->timestamp, vetor[meio]->timestamp);
-    no->valor = vetor[meio]->valor;
-    no->esquerda = plantar_arvore(vetor, inicio, meio - 1);
-    no->direita = plantar_arvore(vetor, meio + 1, fim);
+    for (int i = 1; i <= meio; i++) {
+        valor = valor->proximo;
+    }
+    strcpy(no->timestamp, valor->timestamp);
+    no->valor = valor->valor;
+    no->esquerda = plantar_arvore(lista, inicio, meio - 1);
+    no->direita = plantar_arvore(lista, meio + 1, fim);
 
     return no;
 }
@@ -27,16 +34,17 @@ void desmatar_arvore(NoArvore* raiz) {
     free(raiz);
 }
 
-int contar_valores(Valor* lista) {
+int contar_valores(Dispositivo* lista) {
     int contador = 0;
-    while (lista) {
+    Valor* valor = lista->sensores->valores;
+    while (lista->sensores->valores) {
         contador++;
-        lista = lista->proximo;
+         valor = valor->proximo;
     }
     return contador;
 }
 
-void lista_para_vetor(Valor* lista, Valor** vetor) {
+void lista_para_vetor(Valor* lista, Valor** vetor) { //Não sei se vai precisar
     int i = 0;
     while (lista) {
         vetor[i++] = lista;
@@ -77,6 +85,38 @@ float buscar_timestamp_arvore(NoArvore* raiz, char* timestamp) {
     printf("Timestamp não encontrado!\n");
     printf("Tempo de busca: %.4f ms\n", tempo_ms);
     return -1.0;
+
+}
+
+void prepara_plantacao(Dispositivo* lista){
+    int fim = contar_valores(lista), op;
+    char timestamp[20];
+
+    NoArvore* NoArvore = plantar_arvore(lista, 1, fim);
+
+    do{
+      printf("\nQual das operações deseja fazer? \n\n1- Mostrar Arvore\n2 - Buscar dado na arvore\n3 - Sair\n\nOpcao: ");
+      scanf("%d", &op);
+
+      switch (op) {
+        case 1:
+          mostrar_arvore(NoArvore);
+          break;
+        case 2:
+          printf("\nDigite o timestamp que deseja buscar: ");
+          scanf("%s", timestamp);
+          buscar_timestamp_arvore(NoArvore, timestamp);
+          break;
+        case 3:
+          printf("\nSaindo!!");
+          break;
+        default:
+          printf("\nOpcao invalida!\n");
+
+      }
+    }while(op != 3);
+
+    desmatar_arvore(NoArvore);
 }
 
 

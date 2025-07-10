@@ -4,6 +4,7 @@
 #include "Sensores.h"
 #include "Evento.h"
 #include "Funcoes.h"
+#include "Arvore.h"
 
 
 
@@ -17,7 +18,7 @@ int main() {
 
 
     do {
-        printf("\nCom o que deseja mexer: \n1 - Dispositivos\n2 - Sensores\n3 - Eventos\n4 - Lista de valores de um sensor/atuador \n5 - Sair\n\nEscolha uma opção:");
+        printf("\nCom o que deseja mexer: \n1 - Dispositivos\n2 - Sensores\n3 - Eventos\n4 - Lista de valores de um sensor/atuador \n5 - Mostrar arvore de timestamp\n6 - Sair\n\nEscolha uma opção: ");
         scanf("%d", &opicao);
 
         switch (opicao) {
@@ -34,12 +35,15 @@ int main() {
                 ordem_da_lista();
                 break;
             case 5:
+                prepara_plantacao(lista);
+                break;
+            case 6:
                 printf("finalizado\n");
                 break;
             default:
                 printf("opição invalida!\n");
         }
-    } while (opicao != 5);
+    } while (opicao != 6);
 
     //libera as listas e as filas
     libera(lista);
