@@ -10,9 +10,9 @@ extern FILE *arquivoCsv;
 
 Valor* insere_valor(Valor *listaValor, float valor);
 Dispositivo* encontrarSensor(Dispositivo *listaDispositivos, int id_dispositivo, int id_sensor);
-void printa_lista_crescente(int id_dispositivo, int id_sensor);
-void printa_lista_decrescente(int id_dispositivo, int id_sensor);
-void ordem_da_lista();
+void printa_lista_crescente(Dispositivo* lista, int id_dispositivo, int id_sensor);
+void printa_lista_decrescente(Dispositivo* lista, int id_dispositivo, int id_sensor);
+void ordem_da_lista(Dispositivo* lista);
 
 void minusculas(char* str);  
 void pegaTempo(char *buffer, int tamanho);
@@ -23,6 +23,6 @@ int compararDecrescente(const void *a, const void *b);
 
 bool verificacsv(char *timestamp);
 void exportacsv(Sensor* sensor, Dispositivo* dispositivo);
-void importacsv(Sensor* sensor, Dispositivo* dispositivo);
+void importacsv(Sensor* sensor);
 
 #endif

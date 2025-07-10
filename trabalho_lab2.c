@@ -31,7 +31,7 @@ int main() {
                 opera_evento(lista, alta, media, baixa); //faz as operações com os eventos
                 break;
             case 4:
-                ordem_da_lista();
+                ordem_da_lista(lista);
                 break;
             case 5:
                 prepara_plantacao(lista);

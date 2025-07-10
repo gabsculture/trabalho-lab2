@@ -29,8 +29,8 @@ Valor* insere_valor(Valor *listaValor, float valor) { //insere o valor do sensor
     return novo;  // novo passa a ser a nova cabeça da lista
 }
 
-Dispositivo* encontrarSensor(Dispositivo *listaDispositivos, int id_dispositivo, int id_sensor) {
-    Dispositivo *atual = listaDispositivos;
+Dispositivo* encontrarSensor(Dispositivo* lista, int id_dispositivo, int id_sensor) {
+    Dispositivo *atual = lista;
     while (atual != NULL) {
         if (atual->id == id_dispositivo){
             while (atual->sensores != NULL) {
@@ -44,10 +44,9 @@ Dispositivo* encontrarSensor(Dispositivo *listaDispositivos, int id_dispositivo,
     return NULL;
 }
 
-void printa_lista_crescente(int id_dispositivo, int id_sensor) {
-    extern Dispositivo *listaDispositivos;
+void printa_lista_crescente(Dispositivo* lista, int id_dispositivo, int id_sensor) {
 
-    Dispositivo *dispositivo = encontrarSensor(listaDispositivos, id_dispositivo, id_sensor);
+    Dispositivo *dispositivo = encontrarSensor(lista, id_dispositivo, id_sensor);
     if (dispositivo == NULL) {
         printf("Sensor com ID %d não encontrado!\n", id_sensor);
         return;
@@ -71,10 +70,9 @@ void printa_lista_crescente(int id_dispositivo, int id_sensor) {
     }
 }
 
-void printa_lista_decrescente(int id_dispositivo, int id_sensor) {
-    extern Dispositivo *listaDispositivos;
+void printa_lista_decrescente(Dispositivo* lista, int id_dispositivo, int id_sensor) {
 
-    Dispositivo *dispositivo = encontrarSensor(listaDispositivos, id_dispositivo, id_sensor);
+    Dispositivo *dispositivo = encontrarSensor(lista, id_dispositivo, id_sensor);
     if (dispositivo == NULL) {
         printf("Sensor com ID %d não encontrado!\n", id_sensor);
         return;
@@ -98,7 +96,7 @@ void printa_lista_decrescente(int id_dispositivo, int id_sensor) {
     }
 }
 
-void ordem_da_lista() {
+void ordem_da_lista(Dispositivo* lista) {
         int valor, id_sensor, id_dispositivo;
         do {
         printf("\nEm qual ordem deseja os valores?\n1 - Crescente\n2 - Descresente");
@@ -109,14 +107,14 @@ void ordem_da_lista() {
                 scanf("%d", &id_dispositivo);
                 printf("Digite o id do sensor que deseja ver a lista de valores: ");
                 scanf("%d", &id_sensor);
-                printa_lista_crescente(id_dispositivo, id_sensor);
+                printa_lista_crescente(lista, id_dispositivo, id_sensor);
                 break;
             case 2:
                 printf("Digite o id do dispositivo: ");
                 scanf("%d", &id_dispositivo);
                 printf("Digite o id do sensor que deseja ver a lista de valores: ");
                 scanf("%d", &id_sensor);
-                printa_lista_decrescente(id_dispositivo, id_sensor);
+                printa_lista_decrescente(lista, id_dispositivo, id_sensor);
                 break;
             default:
                 printf("Esse ordem não existe");
@@ -184,7 +182,7 @@ void exportacsv(Sensor* sensor, Dispositivo* dispositivo) {
     fclose(arquivo);
 }
 
-void importacsv(Sensor* sensor, Dispositivo* dispositivo) {
+void importacsv(Sensor* sensor) {
     FILE *arquivo = fopen("arquivoCsv.csv", "r");
 
     if (arquivo == NULL) {
@@ -248,7 +246,7 @@ void importar_todos_csv(Dispositivo* lista) {
     while (d != NULL) {
         Sensor* s = d->sensores;
         while (s != NULL) {
-            importacsv(s, d);
+            importacsv(s);
             s = s->proximo;
         }
         d = d->proximo;
