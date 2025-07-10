@@ -225,4 +225,4 @@ Dispositivo *opera_dispositivos(Dispositivo *dispositivo){
             printf("opicao invalida!\n");
     }
     return lista;
-} 
+}
