@@ -14,8 +14,6 @@ int main() {
     Fila *baixa = cria();
 
     int opicao;
-
-
     do {
         printf("\nCom o que deseja mexer: \n1 - Dispositivos\n2 - Sensores\n3 - Eventos\n4 - Lista de valores de um sensor/atuador \n5 - Mostrar arvore de timestamp\n6 - Sair\n\nEscolha uma opção: ");
         scanf("%d", &opicao);
